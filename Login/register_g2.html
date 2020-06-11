@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>register_g2</title>
+	<style>
+		body{
+			margin:0;
+			background:url(./bg.png) center center;
+			background-size:cover;
+			background-attachment:fixed;
+			background-color:#CCCCCC;
+		}
+		.in{
+			width: 300px;
+			height: 30px;
+			border: 1px solid pink;
+			border-radius: 3px;
+		}
+	</style>
+	<script>
+		function jump(){
+			window.location.href="./register_d3.html";
+		}
+	</script>
+</head>
+
+<body>
+	<div style="position: absolute">
+		<img src="./rg2.png" style="width: 1000px;height: 45px;margin-left: 220px;margin-top:80px"/>
+	</div>
+	
+	<div style="position:absolute;top:200px;left:260px;width: 65%;height: 70%;background-color: white;border: 2px solid pink;border-radius: 5px">
+	<table width="70%" align="center">
+	<tr>
+		<td colspan="2"><font size="6" style="margin-left: 100px">谷粒酬</font>捐赠方注册</td>
+	</tr>
+	<tr>
+		<td>省份:</td>
+		<td>
+			<select class="in">
+				<option value="-1">-----请选择-----</option>
+				<option value="1">广东省</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>城市:</td>
+		<td>
+			<select class="in">
+				<option value="-1">-----请选择-----</option>
+				<option value="1">广州市</option>
+				<option value="2">深圳市</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>具体市内地址:</td>
+		<td><input type="text" placeholder="地址" class="in" style="width: 300px; height: 100px"/></td>
+	</tr>
+	<tr>
+		<td>单位名称:</td>
+		<td><input type="text" placeholder="单位名称" class="in"/></td>
+	</tr>
+	<tr>
+		<td>单位类别:</td>
+		<td><input type="text" placeholder="单位类别" class="in"/></td>
+	</tr>
+	<tr>
+		<td>统一信用代码:</td>
+		<td><input type="text" placeholder="统一信用代码" class="in"/></td>
+	</tr>
+	<tr>
+		<td>单位简介:</td>
+		<td><input type="text" placeholder="单位简介" class="in" style="width: 300px; height: 100px"/></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td><input type="button" value="下一步" style="background-color: indianred;color:white;height:30px;width: 306px;border: none;border-radius: 3px;" onclick="jump()"/></td>
+	</tr>
+	</table>
+	</div>
+</body>
+</html>
