@@ -1,17 +1,18 @@
 <template>
   <div>
+    <el-header>
+      <div id="top">
+        <MainTop v-bind:if_logo="true" v-bind:user_type="'0'"></MainTop>
+      </div>
+    </el-header>
 
-    <div id="top">
-      <MainTop v-bind:if_logo="true" v-bind:user_type="'0'"></MainTop>
-    </div>
-    <router-view>
     <div class="group"
          style="left: 0px; top: 120px; width: 1440px; height: 600px; position: absolute; z-index: 20; opacity: 1;">
       <div class="widget image_view"
            style="width: 1440px; height: 600px; left: 0px; top: 0px; z-index: 5; background-color: rgb(229, 229, 229); border-color: rgb(187, 187, 187); border-width: 0px; border-style: solid; font-weight: normal; font-style: normal; opacity: 1;">
         <div class="image-wrapper">
           <div class="wrapper" style="width: 100%;height: 100%">
-            <img src="./assets/home1.png" draggable="false" style="display: block; height: auto;">
+            <img src="../assets/home1.png" draggable="false" style="display: block; height: auto;">
           </div>
         </div>
       </div>
@@ -100,7 +101,7 @@
                style="border-width: 0px;">
             <div class="image-wrapper">
               <div class="wrapper">
-                <img src="./assets/home2.png" draggable="false"
+                <img src="../assets/home2.png" draggable="false"
                      style="display: block; height: auto;">
               </div>
             </div>
@@ -111,7 +112,7 @@
                style="border-width: 0px;">
             <div class="image-wrapper">
               <div class="wrapper">
-                <img src="./assets/home2.png" draggable="false"
+                <img src="../assets/home2.png" draggable="false"
                      style="display: block; height: auto;">
               </div>
             </div>
@@ -152,17 +153,19 @@
         </div>
       </div>
     </div>
-    </router-view>
-    <MainBottom></MainBottom>
+    <el-footer>
+      <MainBottom></MainBottom>
+    </el-footer>
+
   </div>
 
 </template>
 
 
 <script>
-import './assets/baseStyle.css'
-import MainTop from "./components/MainTop";
-import MainBottom from "./components/MainBottom";
+import '../assets/baseStyle.css'
+import MainTop from "./MainTop";
+import MainBottom from "./MainBottom";
 
 export default {
   name: "Home",
