@@ -20,12 +20,23 @@
 	</style>
 	<script>
 		function jump(){
-			window.location.href="./register_d2.html";
+			var stage1 = document.getElementById("stage1");
+			stage1.style.display = "none";
+			var stage2 = document.getElementById("stage2");
+			stage2.style.display = "block";
+		}
+		
+		function jump2(){
+			var stage2 = document.getElementById("stage2");
+			stage2.style.display = "none";
+			var stage2 = document.getElementById("stage3");
+			stage3.style.display = "block";
 		}
 	</script>
 </head>
 
 <body>
+	<div id="stage1">
 	<div style="position: absolute">
 		<img src="./rg1.png" style="width: 1000px;height: 45px;margin-left: 220px;margin-top:80px"/>
 	</div>
@@ -65,6 +76,58 @@
 		<td><input type="button" value="下一步" style="background-color: indianred;color:white;height:30px;width: 306px;border: none;border-radius: 3px;" onclick="jump()"/></td>
 	</tr>
 	</table>
+	</div>
+	</div>
+	
+	<div id="stage2" style="display: none">
+	<div style="position: absolute">
+		<img src="./rg2.png" style="width: 1000px;height: 45px;margin-left: 220px;margin-top:80px"/>
+	</div>
+	
+	<div style="position:absolute;top:200px;left:260px;width: 65%;height: 40%;background-color: white;border: 2px solid pink;border-radius: 5px">
+	<table width="60%" align="center">
+	<tr>
+		<td colspan="2"><font size="6" style="margin-left: 100px">谷粒酬</font>捐赠方注册</td>
+	</tr>
+	<tr>
+		<td>省份:</td>
+		<td>
+			<select class="in">
+				<option value="-1">-----请选择-----</option>
+				<option value="1">广东省</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>城市:</td>
+		<td>
+			<select class="in">
+				<option value="-1">-----请选择-----</option>
+				<option value="1">广州市</option>
+				<option value="2">深圳市</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td><input type="button" value="下一步" style="background-color: indianred;color:white;height:30px;width: 306px;border: none;border-radius: 3px;" onclick="jump2()"/></td>
+	</tr>
+	</table>
+	</div>
+	</div>
+	
+	<div id="stage3" style="display: none">
+	<div style="position: absolute">
+		<img src="./rg3.png" style="width: 1000px;height: 45px;margin-left: 220px;margin-top:80px"/>
+	</div>
+	
+	<div style="position:absolute;top:200px;left:260px;width: 65%;height: 40%;">
+	<table width="60%" align="center">
+		<tr>
+			<td><span  style="margin-left: 150px;font-size: 50px">注册成功!</span></td>
+		</tr>
+	</table>
+	</div>
 	</div>
 </body>
 </html>
