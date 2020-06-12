@@ -1,5 +1,5 @@
 <template>
-  <div class="group bottom" style="width: 1440px">
+  <div class="group bottom" style="width: 1440px;left:10px">
     <div class="bottom_clo">
       <p>
         <span style="font-size:20px;line-height:29px;">XXXXXXXXXXXX有限公司</span>

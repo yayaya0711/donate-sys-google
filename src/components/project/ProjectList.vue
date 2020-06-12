@@ -11,7 +11,7 @@
             <span>{{'武汉体育中心 ' + i }}</span>
             <el-button style="float: right; padding: 3px 0" type="text" @click="gotoProjectDetail(i)">查看详情</el-button>
           </div>
-          <el-row>
+          <el-row style="margin-top: 15%">
             <el-col :span="10">
               <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
             </el-col>
