@@ -1,7 +1,7 @@
 // import Vue from 'vue'
 import Vue from 'vue/dist/vue.common'
 import Router from 'vue-router'
-// import HelloWorld from '@/components/HelloWorld'
+//  HelloWorldimport from '@/components/HelloWorld'
 import Home from "@/components/Home";
 
 import ProjectList from "@/components/project/ProjectList";
@@ -30,15 +30,14 @@ export default new Router({
     },
     {
       path:'/projectDetail',
-      name:'',
+      name:'谷粒捐物资捐赠系统-项目详情',
       component: ProjectDetail,
-      children:[
-        {
-          path:'donateList',
-          name:'',
-          component: DonateList
-        }
-      ]
+      children:[]
+    },
+    {
+      path:'/projectDetail/donateList',
+      name:'谷粒捐物资捐赠系统-定向捐赠单填写',
+      component: DonateList
     }
   ]
 })
