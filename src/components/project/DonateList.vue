@@ -81,14 +81,15 @@
                   捐赠物资信息
                   <i class="el-icon-plus" style="color: crimson" @click="donateSuppliesFormVisible = true"></i>
                 </p>
+
 <!--                弹窗-->
                 <el-dialog title="添加捐赠物资" :visible.sync="donateSuppliesFormVisible">
                   <el-form :model="form">
 
                     <el-form-item label="物资名称" :label-width="formLabelWidth">
-                      <el-select v-model="form.name" placeholder="请选择">
-                        <el-option v-for="i in project_detail.demande_list.medical" :key="i.id" :label="i.name" :value="i.name"></el-option>
-                        <el-option v-for="i in project_detail.demande_list.daliy" :key="i.id" :label="i.name" :value="i.name"></el-option>
+                      <el-select v-model="form.supply_id" placeholder="请选择" @change="selectSupply">
+                        <el-option v-for="i in project_detail.demande_list.medical" :key="i.id" :label="i.name" :value="i.id"></el-option>
+                        <el-option v-for="i in project_detail.demande_list.daliy" :key="i.id" :label="i.name" :value="i.id"></el-option>
                       </el-select>
                     </el-form-item>
                     <el-form-item label="厂家信息" :label-width="formLabelWidth">
@@ -98,12 +99,24 @@
                       <el-input v-model="form.rules" autocomplete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="捐赠数量" :label-width="formLabelWidth">
-                      <el-input-number v-model="form.amount" @change="handleChange" :min="1" :max="100" label="描述文字"></el-input-number>
+                      <el-input-number v-model="form.amount" @change="handleChange" :min="1" :max="form.supply.needy_amount" label="描述文字"></el-input-number>
+                    </el-form-item>
+                    <el-form-item v-if="form.supply.if_need_identify">
+                      <el-upload
+                        class="upload-demo"
+                        action="https://jsonplaceholder.typicode.com/posts/"
+                        :on-preview="handlePreview"
+                        :on-remove="handleRemove"
+                        :file-list="form.img_info"
+                        list-type="picture">
+                        <el-button size="small" type="primary">点击上传</el-button>
+                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                      </el-upload>
                     </el-form-item>
                   </el-form>
                   <div slot="footer" class="dialog-footer">
-                    <el-button @click="dialogFormVisible = false">不验证只添加</el-button>
-                    <el-button type="primary" @click="dialogFormVisible = false">验证并添加</el-button>
+                    <el-button @click="close1">不验证只添加</el-button>
+                    <el-button type="primary" @click="close2">验证并添加</el-button>
                   </div>
                 </el-dialog>
               </div>
@@ -166,7 +179,8 @@ export default {
               demander_amount: 10000,
               scal: '个',
               rules: 'WWWWWWWWWWWWWWWWWWW',
-              img_url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
+              img_url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+              if_need_identify:1,
             }
           ],
           daliy: [
@@ -177,6 +191,7 @@ export default {
               needy_amount: 200,
               demander_amount: 500,
               scal: '顶',
+              if_need_identify:0,
             },
             {
               name: '被子',
@@ -184,7 +199,8 @@ export default {
               type: '1.5m',
               needy_amount: 200,
               demander_amount: 500,
-              scal: '顶',
+              scal: '床',
+              if_need_identify:0,
             }
           ]
         },
@@ -225,20 +241,59 @@ export default {
       if_anonymous:false,
       donate_msg:'',
       donateSuppliesFormVisible: false,
+      supplies_info: [],
       form: {
-        name: '',
+        supply: {},
+        supply_id:'',
         product: '',
         rules: '',
         amount: 0,
-        supplies_info:{}
+        img_info:[{
+          name: 'food.jpeg',
+          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+        },
+          {
+            name: 'food2.jpeg',
+            url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+          }]
       },
-      formLabelWidth: '120px'
+      formLabelWidth: '120px',
+      add_identitfy:0,
     }
     },
   methods: {
     handleChange(value) {
       console.log(value);
+      console.log(this._data)
     },
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    handlePreview(file) {
+      console.log(fileList);
+    },
+    selectSupply(value){
+      var i;
+      // console.log(this.project_detail.demande_list.medical[0]);
+      for(i of this.project_detail.demande_list.medical){
+        if(i.id === value){
+          this.form.supply = i;
+        }
+      }
+      for(i of this.project_detail.demande_list.daliy){
+        if(i.id === value){
+          this.form.supply = i;
+        }
+      }
+    },
+    close1(){
+      this.donateSuppliesFormVisible = false;
+      this.add_identitfy = 1
+    },
+    close2(){
+      this.donateSuppliesFormVisible = false;
+      this.add_identitfy = 2
+    }
   }
 }
 </script>
