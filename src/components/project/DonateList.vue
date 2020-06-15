@@ -81,6 +81,29 @@
                   捐赠物资信息
                   <i class="el-icon-plus" style="color: crimson" @click="donateSuppliesFormVisible = true"></i>
                 </p>
+                <div>
+                  <el-row v-for="(item,index) in supplies_list" :key="item.supply_id" class="supply_info">
+                    <el-col :span="4" class="supply_item" style="line-height: normal">
+                      <img :src="item.img_info[0].url" style="width: 100%">
+                    </el-col>
+                    <el-col :span="8" class="supply_item" style="line-height: 30px;text-align: left">
+                      <p class="demander_detail">{{item.supply.name}}</p>
+                      <p>{{item.rules}}</p>
+                    </el-col>
+                    <el-col :span="6" class="supply_item">
+                      <el-input-number v-model="item.amount" @change="handleChange"
+                                       :min="1" :max="item.supply.needy_amount" label="描述文字"
+                                       :value="item.amount"></el-input-number>
+                    </el-col>
+                    <el-col :span="3" class="supply_item">
+                      <i v-if="item.add_identitfy==1" class="el-icon-close" style="color: red">未验证</i>
+                      <i v-else-if="item.add_identitfy==2" class="el-icon-check" style="color: green">已验证</i>
+                    </el-col>
+                    <el-col :span="3" class="supply_item">
+                      <i class="el-icon-delete" style="color: red" @click="openDelete(index)"></i>
+                    </el-col>
+                  </el-row>
+                </div>
 
 <!--                弹窗-->
                 <el-dialog title="添加捐赠物资" :visible.sync="donateSuppliesFormVisible">
@@ -131,6 +154,9 @@
                     v-model="donate_msg">
                   </el-input>
                 </p>
+              </div>
+              <div style="margin-bottom: 3%;text-align: center">
+                <el-button type="danger" round @click="gotoDonateFinished">捐赠单</el-button>
               </div>
 
 
@@ -241,7 +267,7 @@ export default {
       if_anonymous:false,
       donate_msg:'',
       donateSuppliesFormVisible: false,
-      supplies_info: [],
+      supplies_list: [],
       form: {
         supply: {},
         supply_id:'',
@@ -255,10 +281,10 @@ export default {
           {
             name: 'food2.jpeg',
             url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-          }]
+          }],
+        add_identitfy:0,
       },
       formLabelWidth: '120px',
-      add_identitfy:0,
     }
     },
   methods: {
@@ -287,12 +313,87 @@ export default {
       }
     },
     close1(){
-      this.donateSuppliesFormVisible = false;
-      this.add_identitfy = 1
+      this.form.add_identitfy = 1;
+      this.addSupply();
     },
     close2(){
+      this.form.add_identitfy = 2
+      this.addSupply();
+    },
+    addSupply(){
       this.donateSuppliesFormVisible = false;
-      this.add_identitfy = 2
+      this.supplies_list.push(this.form);
+      // 初始化
+      console.log(this.form);
+      this.form = {
+        supply: {},
+        supply_id:'',
+          product: '',
+          rules: '',
+          amount: 0,
+          img_info:[{
+          name: 'food.jpeg',
+          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+        }],
+          add_identitfy:0,
+      }
+      console.log(this.form);
+    },
+    openDelete(index) {
+      this.$confirm('此操作将永久删除该物资, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+        this.supplies_list.splice(index,1)
+        console.log(this.supplies_list)
+
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    },
+    gotoDonateFinished(){
+      // 验证：
+      var finished = false
+      //登陆验证
+      // 1.是否未添加物资
+      if(this.supplies_list.length===0){
+        finished = false
+        this.$message.error('请先添加物资~');
+      }
+      // 2.是否有未验证的信息
+      else{
+        for(var i of this.supplies_list){
+          if(i.add_identitfy === 1){
+            finished = false
+            this.$message.error('请先完成验证~');
+            break
+          }else{
+            finished = true
+          }
+        }
+      }
+      // 所有验证判断通过
+      if(finished){
+        // 合并数据
+        var request_data={}
+        this.$set(request_data,'donater_info',this.user_info)
+        this.$set(request_data,'demander_info',this.project_detail.demander)
+        this.$set(request_data,'project_info',this.project_detail)
+        this.$set(request_data,'supplies_info',this.supplies_list)
+        this.$set(request_data,'donate_msg',this.donate_msg)
+        console.log(request_data)
+        // 跳转
+        this.$router.push('/projectDetail/donateList/finished');
+      }
+
     }
   }
 }
@@ -318,5 +419,14 @@ export default {
   }
   .donate_block{
     border-bottom: 1px solid gray;
+  }
+  .supply_info{
+    background: #F1F1F1;
+    margin: 2%;
+  }
+  .supply_item{
+    padding: 1%;
+    line-height: 100px;
+    text-align: center;
   }
 </style>

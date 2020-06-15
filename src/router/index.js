@@ -7,6 +7,8 @@ import Home from "@/components/Home";
 import ProjectList from "@/components/project/ProjectList";
 import ProjectDetail from "@/components/project/ProjectDetail";
 import DonateList from "@/components/project/DonateList";
+import DonateListFinished from "@/components/project/DonateListFinished";
+
 import Login from "@/components/login/Login";
 import Findpassword from "@/components/login/Findpassword";
 import Register_d from "@/components/login/Register_d";
@@ -41,6 +43,11 @@ export default new Router({
       path:'/projectDetail/donateList',
       name:'谷粒捐物资捐赠系统-定向捐赠单填写',
       component: DonateList
+    },
+    {
+      path:'/projectDetail/donateList/finished',
+      name:'谷粒捐物资捐赠系统-定向捐赠单填写',
+      component: DonateListFinished
     },
     {
       path:'/login',
