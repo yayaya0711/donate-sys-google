@@ -12,6 +12,11 @@ import Findpassword from "@/components/login/Findpassword";
 import Register_d from "@/components/login/Register_d";
 import Register_g from "@/components/login/Register_g";
 import Maincontrol from "@/components/Personal/Maincontrol";
+import Love from "@/components/Personal/Love";
+import History from "@/components/Personal/History";
+import Personalcenter from "@/components/Personal/Personalcenter";
+import Message from "@/components/Personal/Message";
+import Checkproject from "@/components/Personal/Checkproject";
 
 Vue.use(Router)
 
@@ -64,9 +69,41 @@ export default new Router({
         component: Register_g,
        },
       {
-          path:'/personalcenter',
+          path:'/Maincontrol',
           name:"个人中心",
           component: Maincontrol,
+          children: [
+                  {
+                    path: '/love',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
+                    name: 'Love',
+                    component: Love
+                  },
+              {
+                path: '/history',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
+                name: 'History',
+                component: History
+              },
+              {
+                path: '/personalcenter',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
+                name: 'Personalcenter',
+                component: Personalcenter
+              },
+              {
+                path: '/message',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
+                name: 'Message',
+                component: Message
+              },
+              {
+                path: '',
+                component: Love
+              },
+              {
+                path: '/checkproject',
+                name: 'Checkproject',
+                component: Checkproject
+              }
+
+          ]
       }
 
   ]
