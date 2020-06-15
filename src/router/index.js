@@ -7,12 +7,11 @@ import Home from "@/components/Home";
 import ProjectList from "@/components/project/ProjectList";
 import ProjectDetail from "@/components/project/ProjectDetail";
 import DonateList from "@/components/project/DonateList";
-import DonateListFinished from "@/components/project/DonateListFinished";
-
 import Login from "@/components/login/Login";
 import Findpassword from "@/components/login/Findpassword";
 import Register_d from "@/components/login/Register_d";
 import Register_g from "@/components/login/Register_g";
+import Maincontrol from "@/components/Personal/Maincontrol";
 
 Vue.use(Router)
 
@@ -45,11 +44,6 @@ export default new Router({
       component: DonateList
     },
     {
-      path:'/projectDetail/donateList/finished',
-      name:'谷粒捐物资捐赠系统-定向捐赠单填写',
-      component: DonateListFinished
-    },
-    {
       path:'/login',
       name:'登录',
       component: Login
@@ -68,7 +62,12 @@ export default new Router({
         path:'/login/Register_g',
         name:'受赠方注册',
         component: Register_g,
-       }
+       },
+      {
+          path:'/personalcenter',
+          name:"个人中心",
+          component: Maincontrol,
+      }
 
   ]
 })
