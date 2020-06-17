@@ -18,7 +18,7 @@
 						<el-input v-model="form.username" style="width:160px"></el-input>
 						</el-form-item>
 						<el-form-item label="密码" prop="password" style="width:200px; margin-left: 80px">
-						<el-input v-model="form.password" style="width:160px"></el-input>
+						<el-input v-model="form.password" show-password style="width:160px"></el-input>
 						</el-form-item>
 						<el-form-item style="margin-left: -60px">
 						<el-button type="primary;" style="background-color: indianred; color: white; width: 120px" @click="submitForm('form')">登录</el-button>
@@ -38,7 +38,7 @@
 						</tr>
 					</table>
 				</div>
-			</el-col>	
+			</el-col>
 			</div>
 	</el-main>
 
