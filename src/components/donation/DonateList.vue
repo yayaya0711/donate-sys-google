@@ -5,51 +5,51 @@
     </el-header>
     <SearchBar></SearchBar>
     <el-main style="width:1440px;background:#F1F1F1">
-      <el-row>
-        <el-col :span="12" :offset="3">
-          <div style="background: white;height: 270px">
-            <el-row>
-              <el-col :span="12">
-                <div style="width: 90%;margin: 5%;text-align:center;vertical-align:middle;">
-                  <img src='https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg' class="image" style="width: 100%;height:60%">
-                </div>
-              </el-col>
-              <el-col :span="12">
-                <div style="margin: 5%;">
-                  <div class="need_staff" style="text-align: left">
-                    <p class="project_name">{{project_detail.name}}</p>
-                    <p class="project_info">
-                      <span>
-                        <i class="el-icon-location" style="color: red"></i>
-                        {{project_detail.place}}
-                      </span>
-                    </p>
-                    <p class="project_info">
-                      <span>{{'发起方： '+project_detail.demander.name}}</span>
-                    </p>
-                    <p class="project_info">
-                      <span>
-                        紧急度：
-                        <i v-for="i in project_detail.emergency" :key="i" class="el-icon-star-on" style="color: red"></i>
-                      </span>
-                    </p>
-                    <p class="project_info">
-                      <span>{{"参与度： "+project_detail.receive_times +" 人次"}}</span>
-                    </p>
-                    <li v-for="(item,idx) in needy_list" style="color: crimson;line-height: 20px">
-                      <span>{{item[0]+': '+ item[1]+' '+ item[2]}}</span>
-                    </li>
-                  </div>
-                </div>
-              </el-col>
-            </el-row>
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <div style="background: white;height: 270px"></div>
-        </el-col>
-      </el-row>
-<!--      <ProjectCard :v-bind="project_detail"></ProjectCard>-->
+<!--      <el-row>-->
+<!--        <el-col :span="12" :offset="3">-->
+<!--          <div style="background: white;height: 270px">-->
+<!--            <el-row>-->
+<!--              <el-col :span="12">-->
+<!--                <div style="width: 90%;margin: 5%;text-align:center;vertical-align:middle;">-->
+<!--                  <img src='https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg' class="image" style="width: 100%;height:60%">-->
+<!--                </div>-->
+<!--              </el-col>-->
+<!--              <el-col :span="12">-->
+<!--                <div style="margin: 5%;">-->
+<!--                  <div class="need_staff" style="text-align: left">-->
+<!--                    <p class="project_name">{{project_detail.name}}</p>-->
+<!--                    <p class="project_info">-->
+<!--                      <span>-->
+<!--                        <i class="el-icon-location" style="color: red"></i>-->
+<!--                        {{project_detail.place}}-->
+<!--                      </span>-->
+<!--                    </p>-->
+<!--                    <p class="project_info">-->
+<!--                      <span>{{'发起方： '+project_detail.demander.name}}</span>-->
+<!--                    </p>-->
+<!--                    <p class="project_info">-->
+<!--                      <span>-->
+<!--                        紧急度：-->
+<!--                        <i v-for="i in project_detail.emergency" :key="i" class="el-icon-star-on" style="color: red"></i>-->
+<!--                      </span>-->
+<!--                    </p>-->
+<!--                    <p class="project_info">-->
+<!--                      <span>{{"参与度： "+project_detail.receive_times +" 人次"}}</span>-->
+<!--                    </p>-->
+<!--                    <li v-for="(item,idx) in needy_list" style="color: crimson;line-height: 20px">-->
+<!--                      <span>{{item[0]+': '+ item[1]+' '+ item[2]}}</span>-->
+<!--                    </li>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </el-col>-->
+<!--            </el-row>-->
+<!--          </div>-->
+<!--        </el-col>-->
+<!--        <el-col :span="6">-->
+<!--          <div style="background: white;height: 270px"></div>-->
+<!--        </el-col>-->
+<!--      </el-row>-->
+      <ProjectCard :project_detail="project_detail"></ProjectCard>
       <el-row  style="margin-top: 5%">
         <el-col :span="18" :offset="3">
           <div style="background: white;text-align: left">
@@ -109,7 +109,6 @@
                 <!--                弹窗-->
                 <el-dialog title="添加捐赠物资" :visible.sync="donateSuppliesFormVisible">
                   <el-form :model="form">
-
                     <el-form-item label="物资名称" :label-width="formLabelWidth">
                       <el-select v-model="form.supply_id" placeholder="请选择" @change="selectSupply">
                         <el-option v-for="i in project_detail.demande_list.medical" :key="i.id" :label="i.name" :value="i.id"></el-option>
@@ -406,16 +405,6 @@ export default {
 </script>
 
 <style scoped>
-  .project_name{
-    font-size: 20px;
-    line-height: 26px;
-    color: crimson;
-  }
-  .project_info{
-    font-size: 12px;
-    line-height: 12px;
-    color: gray;
-  }
   .project_info > span{
     margin-right: 10px;
   }
