@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-header>
-      <MainTop v-bind:if_logo="true" v-bind:user_type="'0'"></MainTop>
+      <MainTop :header_info="header_info"></MainTop>
     </el-header>
     <SearchBar></SearchBar>
     <el-main style="width:1440px;background:#F1F1F1">
@@ -182,6 +182,12 @@ export default {
   name: "DonateList",
   data () {
     return {
+      header_info:{
+        height_line:-1,
+        if_logo: false,
+        user_type: '0', // 0 is donator, 1 is reciver
+        if_show_navi:false
+      },
       project_detail: {
         id: '0100001',
         name: '武汉体育中心',
@@ -288,7 +294,22 @@ export default {
       formLabelWidth: '120px',
     }
   },
+  created(){
+    this.getParams()
+    console.log(this.header_info)
+  },
   methods: {
+    getParams(){
+      // 取到路由带过来的参数
+      console.log('准备数据中。。。。。')
+      // 将数据放在当前组件的数据内
+      const routerParams = this.$route.params.jum
+      this.header_info = routerParams.header_info
+      this.project_detail = routerParams.project_detail
+      this.header_info.height_line = -1//哪一个link 块被选中，即表示当前页
+      this.header_info.if_show_navi = false
+      console.log('数据已准备好！')
+    },
     handleChange(value) {
       console.log(value);
       console.log(this._data)
@@ -390,12 +411,13 @@ export default {
         this.$set(request_data,'project_info',this.project_detail)
         this.$set(request_data,'supplies_info',this.supplies_list)
         this.$set(request_data,'donate_msg',this.donate_msg)
+        this.$set(request_data,'header_info',this.header_info)
         console.log(request_data)
         // 跳转
         this.$router.push({
-          name: '谷粒捐物资捐赠系统-定向捐赠单填写完成',
+          name: '定向捐赠单填写完成',
           // name: 'mallList',
-          params: request_data
+          params: {jum:request_data}
         });
       }
 

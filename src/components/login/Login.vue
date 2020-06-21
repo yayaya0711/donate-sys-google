@@ -1,8 +1,8 @@
 <template>
 	<div>
 	<el-header>
-      <div id="top">
-        <MainTop v-bind:if_logo="true" v-bind:user_type="'0'"></MainTop>
+      <div>
+        <MainTop :header_info="header_info"></MainTop>
       </div>
     </el-header>
 	<div id="top" style="margin-top:-50px">
@@ -64,7 +64,13 @@ export default {
            password: ""
          },
          rules: {
-       }
+       },
+      header_info:{
+        height_line:-1,
+        if_logo: false,
+        user_type: '0', // 0 is donator, 1 is reciver
+        if_show_navi:false
+      },
        };
   },
   methods:{

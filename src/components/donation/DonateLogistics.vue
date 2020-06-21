@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-header>
-      <MainTop v-bind:if_logo="true" v-bind:user_type="'0'"></MainTop>
+      <MainTop :header_info="header_info"></MainTop>
     </el-header>
     <!--如果有物流信息则显示当前物流情况，如无，则输入物流信息-->
     <el-main style="width:1440px;background:#F1F1F1">
@@ -84,6 +84,12 @@ export default {
   name: "DonateLogistics",
   data() {
     return {
+      header_info:{
+        height_line:-1,
+        if_logo: false,
+        user_type: '0', // 0 is donator, 1 is reciver
+        if_show_navi:false
+      },
       if_logistics: false,
       logistics: {
         company: '韵达快递',
@@ -121,11 +127,12 @@ export default {
     getParams() {
       // 取到路由带过来的参数
       console.log(this.$route.params)
-      const routerParams = this.$route.params
+      const routerParams = this.$route.params.jum
       console.log('准备数据中。。。。。')
       // 将数据放在当前组件的数据内
       this.donater_info = routerParams.donater_info;
       this.project_info = routerParams.project_info;
+      this.header_info = routerParams.header_info
       console.log('数据已准备好！')
     },
     querySearch(queryString, cb) {
