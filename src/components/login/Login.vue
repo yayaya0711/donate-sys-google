@@ -93,12 +93,17 @@ export default {
 	submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            if(this.form.username !="root" || this.form.password!="123456"){
-              this.$message.error('账号密码不正确');
-              return false;
-            }else{//真正项目中登录成功之后，就可以用路由跳转页面
-               this.$router.push('/Maincontrol');
-			   return true;
+            if(this.form.username =="root" && this.form.password=="123456"){
+				this.$router.push('/Maincontrol');
+			    return true;
+            }
+			else if(this.form.username == "root2" && this.form.password=="123456"){
+				this.$router.push('/Maincontrol_g');
+			    return true;
+			}
+			else{//真正项目中登录成功之后，就可以用路由跳转页面
+               this.$message.error('账号密码不正确');
+               return false;
 		  		}
 		  }
         });
