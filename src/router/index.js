@@ -24,6 +24,11 @@ import Personalcenter from "@/components/Personal/Personalcenter";
 import Message from "@/components/Personal/Message";
 import Checkproject from "@/components/Personal/Checkproject";
 
+import Maincontrol_g from "@/components/Personal/Maincontrol_g";
+import Personalcenter_g from "@/components/Personal/Personalcenter_g";
+import Setproject from "@/components/Personal/Setproject";
+import History_g from "@/components/Personal/History_g";
+
 Vue.use(Router)
 
 export default new Router({
@@ -120,7 +125,44 @@ export default new Router({
         }
 
       ]
-    }
+    },
+      {
+        path: '/Maincontrol_g',
+        name: "受赠方个人中心",
+        component: Maincontrol_g,
+        children: [
+          {
+            path: '/history_g',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
+            name: 'History_g',
+            component: History_g
+          },
+          {
+            path: '/personalcenter_g',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
+            name: 'Personalcenter_g',
+            component: Personalcenter_g
+          },
+          {
+            path: '/message_g',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
+            name: 'Message',
+            component: Message
+          },
+          {
+            path: '',
+            component: History
+          },
+          {
+            path: '/setproject',
+            name: 'Setproject',
+            component: Setproject
+          },
+              {
+                path: '/checkproject_g',
+                name: 'Checkproject',
+                component: Checkproject
+              }
+
+        ]
+      }
 
   ]
 })
