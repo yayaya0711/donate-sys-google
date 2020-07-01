@@ -3,13 +3,23 @@
     <el-col :span="24">
       <div class="grid-content" style="width: 1440px;background: lightpink;height: 80px;line-height: 80px;">
         <el-col :span="12" :offset="3">
-          <el-breadcrumb separator="/" style="line-height: 80px">
-            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item>项目列表</el-breadcrumb-item>
+<!--          <el-breadcrumb class="app-breadcrumb" separator="/">-->
+<!--            <transition-group name="breadcrumb">-->
+<!--              <el-breadcrumb-item v-for="(item,index) in levelList" :key="item.path">-->
+<!--                <span v-if="item.redirect==='noRedirect'||index==levelList.length-1" class="no-redirect">{{ item.meta.title }}</span>-->
+<!--                <a v-else @click.prevent="handleLink(item)">{{ item.meta.title }}</a>-->
+<!--              </el-breadcrumb-item>-->
+<!--            </transition-group>-->
+<!--          </el-breadcrumb>-->
+          <el-breadcrumb separator="/" style="line-height: 80px" >
+            <el-breadcrumb-item v-for="i in navi_info.navi_list" :key="i.path" :to="{ path: i.path }">{{i.name}}</el-breadcrumb-item>
+            <el-breadcrumb-item >{{navi_info.now_place}}</el-breadcrumb-item>
+
+            <!--            <el-breadcrumb-item @click="gotoPage(i.path)">{{i.name}}</el-breadcrumb-item>-->
           </el-breadcrumb>
         </el-col>
         <el-col :span="6">
-          <div class="grid-content bg-purple" style="height: 80px;">
+          <div class="grid-content bg-purple" style="height: 80px;" v-if="navi_info.if_searchBar">
             <el-autocomplete v-model="state" :fetch-suggestions="querySearchAsync" placeholder="请输入内容"
                              @select="handleSelect">
               <i class="el-icon-search el-input__icon" slot="suffix" @click="handleSelect">
@@ -25,14 +35,67 @@
 <script>
 export default {
   name: "SearchBar",
+  props:{
+    navi_info: {
+      type: Object,//type为Array,default为函数
+      default() {
+      }
+    },
+  },
   data() {
     return {
       restaurants: [],
       state: '',
       timeout: null,
+      levelList: null,
     };
   },
+  watch: {
+    $route() {
+      this.getBreadcrumb()
+    }
+  },
+  created() {
+    this.getBreadcrumb()
+    console.log('search bar!')
+    console.log(this.navi_info)
+  },
   methods: {
+    // gotoPage(path){
+    //   console.log(path)
+    // },
+    getBreadcrumb() {
+      // only show routes with meta.title
+      let matched = this.$route.matched.filter(item => item.meta && item.meta.title)
+      const first = matched[0]
+
+      if (!this.isDashboard(first)) {
+        matched = [{ path: '/dashboard', meta: { title: '首页' }}].concat(matched)
+      }
+
+      this.levelList = matched.filter(item => item.meta && item.meta.title && item.meta.breadcrumb !== false)
+    },
+    isDashboard(route) {
+      const name = route && route.name
+      if (!name) {
+        return false
+      }
+      return name.trim().toLocaleLowerCase() === 'Dashboard'.toLocaleLowerCase()
+    },
+    pathCompile(path) {
+      const { params } = this.$route
+      var toPath = pathToRegexp.compile(path)
+      return toPath(params)
+    },
+    handleLink(item) {
+      const { redirect, path } = item
+      if (redirect) {
+        this.$router.push(redirect)
+        return
+      }
+      this.$router.push(this.pathCompile(path))
+    },
+
     loadAll() {
       return [
         {"value": "三全鲜食（北新泾店）", "address": "长宁区新渔路144号"},
@@ -133,6 +196,7 @@ export default {
     display: table;
     content: "";
   }
+
   .clearfix:after {
     clear: both
   }

@@ -32,6 +32,7 @@ import History_g from "@/components/Personal/History_g";
 Vue.use(Router)
 
 export default new Router({
+  mode:'history',
   routes: [
     {
       path: '/',
@@ -90,33 +91,29 @@ export default new Router({
       component: Register_g,
     },
     {
-      path: '/Maincontrol',
+      path: '/Maincontrol/:user_id/',
       name: "个人中心",
       component: Maincontrol,
       children: [
         {
-          path: '/love',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
+          path: '/Maincontrol/love/:user_id/',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
           name: 'Love',
           component: Love
         },
         {
-          path: '/history',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
+          path: '/Maincontrol/history/:user_id/',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
           name: 'History',
           component: History
         },
         {
-          path: '/personalcenter',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
+          path: '/Maincontrol/personalcenter/:user_id/',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
           name: 'Personalcenter',
           component: Personalcenter
         },
         {
-          path: '/message',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
+          path: '/Maincontrol/message/:user_id/',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
           name: 'Message',
           component: Message
-        },
-        {
-          path: '',
-          component: Love
         },
         {
           path: '/checkproject',

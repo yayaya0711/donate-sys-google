@@ -3,52 +3,8 @@
     <el-header>
       <MainTop :header_info="header_info"></MainTop>
     </el-header>
-    <SearchBar></SearchBar>
+    <SearchBar :navi_info="navi_info"></SearchBar>
     <el-main style="width:1440px;background:#F1F1F1">
-<!--      <el-row>-->
-<!--        <el-col :span="12" :offset="3">-->
-<!--          <div style="background: white;height: 270px">-->
-<!--            <el-row>-->
-<!--              <el-col :span="12">-->
-<!--                <div style="width: 90%;margin: 5%;text-align:center;vertical-align:middle;">-->
-<!--                  <img src='https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg' class="image" style="width: 100%;height:60%">-->
-<!--                </div>-->
-<!--              </el-col>-->
-<!--              <el-col :span="12">-->
-<!--                <div style="margin: 5%;">-->
-<!--                  <div class="need_staff" style="text-align: left">-->
-<!--                    <p class="project_name">{{project_detail.name}}</p>-->
-<!--                    <p class="project_info">-->
-<!--                      <span>-->
-<!--                        <i class="el-icon-location" style="color: red"></i>-->
-<!--                        {{project_detail.place}}-->
-<!--                      </span>-->
-<!--                    </p>-->
-<!--                    <p class="project_info">-->
-<!--                      <span>{{'发起方： '+project_detail.demander.name}}</span>-->
-<!--                    </p>-->
-<!--                    <p class="project_info">-->
-<!--                      <span>-->
-<!--                        紧急度：-->
-<!--                        <i v-for="i in project_detail.emergency" :key="i" class="el-icon-star-on" style="color: red"></i>-->
-<!--                      </span>-->
-<!--                    </p>-->
-<!--                    <p class="project_info">-->
-<!--                      <span>{{"参与度： "+project_detail.receive_times +" 人次"}}</span>-->
-<!--                    </p>-->
-<!--                    <li v-for="(item,idx) in needy_list" style="color: crimson;line-height: 20px">-->
-<!--                      <span>{{item[0]+': '+ item[1]+' '+ item[2]}}</span>-->
-<!--                    </li>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </el-col>-->
-<!--            </el-row>-->
-<!--          </div>-->
-<!--        </el-col>-->
-<!--        <el-col :span="6">-->
-<!--          <div style="background: white;height: 270px"></div>-->
-<!--        </el-col>-->
-<!--      </el-row>-->
       <ProjectCard :project_detail="project_detail"></ProjectCard>
       <el-row  style="margin-top: 5%">
         <el-col :span="18" :offset="3">
@@ -57,20 +13,20 @@
               <div class="donate_block">
                 <p class="demander_detail" >受赠方信息</p>
                 <p class="demander_info">捐赠项目&nbsp;&nbsp;&nbsp;{{project_detail.name}}</p>
-                <p class="demander_info">受赠机构&nbsp;&nbsp;&nbsp;{{project_detail.demander.name}}</p>
-                <p class="demander_info">负责人姓名&nbsp;&nbsp;&nbsp;{{project_detail.demander.contace_name}}</p>
-                <p class="demander_info">联系方式&nbsp;&nbsp;&nbsp;{{project_detail.demander.contact_tel}}</p>
-                <p class="demander_info">联系地址&nbsp;&nbsp;&nbsp;{{project_detail.place}}</p>
+                <p class="demander_info">受赠机构&nbsp;&nbsp;&nbsp;{{recipient.company}}</p>
+                <p class="demander_info">负责人姓名&nbsp;&nbsp;&nbsp;{{recipient.name}}</p>
+                <p class="demander_info">联系方式&nbsp;&nbsp;&nbsp;{{recipient.phone}}</p>
+                <p class="demander_info">联系地址&nbsp;&nbsp;&nbsp;{{recipient.com_address}}</p>
               </div>
 
               <div class="donate_block">
                 <p class="demander_detail" >捐赠方信息</p>
-                <p class="demander_info">捐赠方姓名&nbsp;&nbsp;&nbsp;{{user_info.name}}</p>
-                <p class="demander_info">联系方式&nbsp;&nbsp;&nbsp;{{user_info.tel}}</p>
-                <p class="demander_info">身份证号&nbsp;&nbsp;&nbsp;{{user_info.id}}</p>
+                <p class="demander_info">捐赠方姓名&nbsp;&nbsp;&nbsp;{{donor.name}}</p>
+                <p class="demander_info">联系方式&nbsp;&nbsp;&nbsp;{{donor.phone}}</p>
+                <p class="demander_info">身份证号&nbsp;&nbsp;&nbsp;{{donor.id_number}}</p>
                 <p class="demander_info">是否匿名捐赠&nbsp;&nbsp;
                   <el-switch
-                    v-model="user_info.if_anonymous"
+                    v-model="donor.if_anonymous"
                     active-color="#ff4949"
                     inactive-color="#C0CCDA">
                   </el-switch>
@@ -97,11 +53,13 @@
                                        :value="item.amount"></el-input-number>
                     </el-col>
                     <el-col :span="3" class="supply_item">
-                      <i v-if="item.add_identitfy==1" class="el-icon-close" style="color: red">未验证</i>
-                      <i v-else-if="item.add_identitfy==2" class="el-icon-check" style="color: green">已验证</i>
+                      <i v-if="item.identitfy" class="el-icon-check" style="color: green">已验证</i>
+                      <i v-else class="el-icon-close" style="color: red">未验证</i>
                     </el-col>
                     <el-col :span="3" class="supply_item">
+                      <i class="el-icon-edit" @click="editSupplyInfo(index)" style="margin-right: 10%"></i>
                       <i class="el-icon-delete" style="color: red" @click="openDelete(index)"></i>
+
                     </el-col>
                   </el-row>
                 </div>
@@ -111,14 +69,14 @@
                   <el-form :model="form">
                     <el-form-item label="物资名称" :label-width="formLabelWidth">
                       <el-select v-model="form.supply_id" placeholder="请选择" @change="selectSupply">
-                        <el-option v-for="i in project_detail.demande_list.medical" :key="i.id" :label="i.name" :value="i.id"></el-option>
-                        <el-option v-for="i in project_detail.demande_list.daliy" :key="i.id" :label="i.name" :value="i.id"></el-option>
+                        <el-option v-for="i in project_detail.demande_list.medical" :key="i.id" :label="i.name" :value="i.id" :disabled="typeof i.if_select!='undefined' && i.if_select"></el-option>
+                        <el-option v-for="i in project_detail.demande_list.daliy" :key="i.id" :label="i.name" :value="i.id" :disabled="typeof i.if_select!='undefined'&& i.if_select"></el-option>
                       </el-select>
                     </el-form-item>
-                    <el-form-item label="厂家信息" :label-width="formLabelWidth">
+                    <el-form-item label="物资类别" :label-width="formLabelWidth">
                       <el-input v-model="form.product" autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="规格信息" :label-width="formLabelWidth">
+                    <el-form-item label="规格标准" :label-width="formLabelWidth">
                       <el-input v-model="form.rules" autocomplete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="捐赠数量" :label-width="formLabelWidth">
@@ -136,10 +94,15 @@
                         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
                       </el-upload>
                     </el-form-item>
+                    <el-form-item label="" :label-width="formLabelWidth">
+                      <el-button type="primary" @click="identifySupply(form.supply_id)">物资验证</el-button>
+                      <i v-if="form.identitfy" class="el-icon-check" style="color: green"></i>
+                      <i v-else class="el-icon-close" style="color: red"></i>
+                    </el-form-item>
                   </el-form>
                   <div slot="footer" class="dialog-footer">
-                    <el-button @click="close1">不验证只添加</el-button>
-                    <el-button type="primary" @click="close2">验证并添加</el-button>
+                    <el-button @click="closeNoAdd">取消</el-button>
+                    <el-button type="primary" @click="closeAdd">添加</el-button>
                   </div>
                 </el-dialog>
               </div>
@@ -188,6 +151,18 @@ export default {
         user_type: '0', // 0 is donator, 1 is reciver
         if_show_navi:false
       },
+      navi_info:{
+        if_searchBar:false,
+        navi_list:[
+          {name: '首页',path:'/'},
+          {name: '项目列表',path: '/projectList'},
+          {name:'项目详情',path:'/projectList/projectDetail'}
+        ],
+        now_place:'定向捐赠单填写'
+      },
+      // donateList_info_response:{},
+      recipient:{},
+      donor:{},
       project_detail: {
         id: '0100001',
         name: '武汉体育中心',
@@ -261,17 +236,6 @@ export default {
         ]
 
       },
-      needy_list: [
-        ['口罩', '1000', '个'],
-        ['帐篷', '200', '顶'],
-        ['被子', '200', '床']
-      ],
-      user_info:{
-        name:'李粒粒',
-        tel:"987654321",
-        id:"433333333333333333",
-        if_anonymous:false,
-      },
       donate_msg:'',
       donateSuppliesFormVisible: false,
       supplies_list: [],
@@ -289,7 +253,7 @@ export default {
             name: 'food2.jpeg',
             url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
           }],
-        add_identitfy:0,
+        identitfy:false,
       },
       formLabelWidth: '120px',
     }
@@ -297,6 +261,24 @@ export default {
   created(){
     this.getParams()
     console.log(this.header_info)
+    this.donateList_info_response = {
+      "donor": {
+        "id_number": "123456",
+        "name": "alice",
+        "phone": "123456"
+      },
+      "msg": "返回成功",
+      "recipient": {
+        "com_address": "北京",
+        "company": "医院a",
+        "name": "医院a",
+        "phone": "123456"
+      },
+      "status": 200
+    }
+    this.donor = this.donateList_info_response.donor
+    this.donor.if_anonymous=false
+    this.recipient = this.donateList_info_response.recipient
   },
   methods: {
     getParams(){
@@ -322,29 +304,28 @@ export default {
     },
     selectSupply(value){
       var i;
-      // console.log(this.project_detail.demande_list.medical[0]);
+       // console.log(this.project_detail.demande_list.medical[0]);
       for(i of this.project_detail.demande_list.medical){
         if(i.id === value){
           this.form.supply = i;
+          this.form.supply.if_need_identify = true
         }
       }
       for(i of this.project_detail.demande_list.daliy){
         if(i.id === value){
           this.form.supply = i;
+          this.form.supply.if_need_identify = false
         }
       }
+
     },
-    close1(){
-      this.form.add_identitfy = 1;
-      this.addSupply();
+    closeNoAdd(){
+      this.donateSuppliesFormVisible = false;
     },
-    close2(){
-      this.form.add_identitfy = 2
-      this.addSupply();
-    },
-    addSupply(){
+    closeAdd(){
       this.donateSuppliesFormVisible = false;
       this.supplies_list.push(this.form);
+      this.noteSelect(this.form.supply.id, true)
       // 初始化
       console.log(this.form);
       this.form = {
@@ -357,9 +338,32 @@ export default {
           name: 'food.jpeg',
           url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
         }],
-        add_identitfy:0,
+        identitfy:false,
       }
       console.log(this.form);
+    },
+    noteSelect(value, t){
+      var i;
+      for(i of this.project_detail.demande_list.medical){
+        if(i.id === value){
+          i.if_select = t
+        }
+      }
+      for(i of this.project_detail.demande_list.daliy){
+        if(i.id === value){
+          i.if_select = t
+        }
+      }
+    },
+    editSupplyInfo(index){
+      // 修改添加的物资信息
+      console.log('this is edit supply function~')
+      console.log(this.supplies_list[index])
+      this.donateSuppliesFormVisible = true
+      this.form = this.supplies_list[index]
+      // this.noteSelect(this.supplies_list[index].id,false)
+      // this.supplies_list.splice(index,1)
+      console.log(this.supplies_list)
     },
     openDelete(index) {
       this.$confirm('此操作将永久删除该物资, 是否继续?', '提示', {
@@ -371,6 +375,8 @@ export default {
           type: 'success',
           message: '删除成功!'
         });
+        console.log(this.supplies_list[index])
+        this.noteSelect(this.supplies_list[index].id,false)
         this.supplies_list.splice(index,1)
         console.log(this.supplies_list)
 
@@ -380,6 +386,10 @@ export default {
           message: '已取消删除'
         });
       });
+    },
+    identifySupply(){
+      console.log('This is identify supply fuction')
+      this.form.identitfy = true
     },
     gotoDonateFinished(){
       // 验证：
@@ -393,12 +403,12 @@ export default {
       // 2.是否有未验证的信息
       else{
         for(var i of this.supplies_list){
-          if(i.add_identitfy === 1){
+          if(i.identitfy){
+            finished = true
+          }else{
             finished = false
             this.$message.error('请先完成验证~');
             break
-          }else{
-            finished = true
           }
         }
       }
