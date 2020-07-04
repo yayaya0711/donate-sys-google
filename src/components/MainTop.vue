@@ -19,37 +19,44 @@
     </div>
     <div v-if="header_info.if_show_navi" style="margin-left: auto">
       <div data-type="top_title2">
-<!--        <p :class="coms===1?'hear1':'hear'"></p>-->
-<!--        判断coms是否等于1，如果等于就追加hear1类名否则追加hear类名-->
-        <span data-type="top_note2" :class="[header_info.height_line===0?'heightline':'','--mb--rich-text']" data-boldtype="0" @click="gotoHome()">
+        <!--        <p :class="coms===1?'hear1':'hear'"></p>-->
+        <!--        判断coms是否等于1，如果等于就追加hear1类名否则追加hear类名-->
+        <span data-type="top_note2" :class="[header_info.height_line===0?'heightline':'','--mb--rich-text']"
+              data-boldtype="0" @click="gotoHome()">
           首页
         </span>
       </div>
       <div data-type="top_title2">
-        <span data-type="top_note2" :class="header_info.height_line===1?'--mb--rich-text heightline':'--mb--rich-text'" data-boldtype="0">
+        <span data-type="top_note2" :class="header_info.height_line===1?'--mb--rich-text heightline':'--mb--rich-text'"
+              data-boldtype="0">
           平台介绍
         </span>
       </div>
       <div data-type="top_title2">
-        <span v-if="header_info.user_type==='1'" data-type="top_note2" :class="header_info.height_line===2?'--mb--rich-text heightline':'--mb--rich-text'" data-boldtype="0">
+        <span v-if="header_info.user_type==='1'" data-type="top_note2"
+              :class="header_info.height_line===2?'--mb--rich-text heightline':'--mb--rich-text'" data-boldtype="0">
           项目发布
         </span>
-        <span v-else="" data-type="top_note2" :class="header_info.height_line===2?'--mb--rich-text heightline':'--mb--rich-text'" data-boldtype="0" @click="gotoProjectList()">
+        <span v-else="" data-type="top_note2"
+              :class="header_info.height_line===2?'--mb--rich-text heightline':'--mb--rich-text'" data-boldtype="0"
+              @click="gotoProjectList()">
           捐赠项目
         </span>
       </div>
       <div data-type="top_title2">
-        <span data-type="top_note2" :class="header_info.height_line===3?'--mb--rich-text heightline':'--mb--rich-text'" data-boldtype="0">
+        <span data-type="top_note2" :class="header_info.height_line===3?'--mb--rich-text heightline':'--mb--rich-text'"
+              data-boldtype="0">
           关于我们
         </span>
       </div>
     </div>
-      <div :style="{'margin-left':header_info.if_show_navi ? '':'auto'}">
+    <div :style="{'margin-left':header_info.if_show_navi ? '':'auto'}">
       <div data-type="top_title2" style="display: table">
         <div class="widget svg_icon_path clickable" style="display: table-cell">
           <span class="icon svg-icon-wrap svg-fa5 svg-fa5-sign-in-alt-fas-wrap"
                 style="width: 24px; height: 24px; min-width: 24px; min-height: 24px;">
-            <svg v-if="header_info.if_login" xmlns="http://www.w3.org/2000/svg" class="svg-icon" viewBox="64 64 896 896" width="27"
+            <svg v-if="header_info.if_login" xmlns="http://www.w3.org/2000/svg" class="svg-icon" viewBox="64 64 896 896"
+                 width="27"
                  height="27" style="fill: rgb(16, 16, 16);"
                  @click="gotoPersonal('1')">
               <path
@@ -66,6 +73,9 @@
               </path>
             </svg>
           </span>
+          <el-popconfirm v-if="header_info.if_login" icon="el-icon-info" title="确认退出登录吗？" @onConfirm="logout()">
+            <el-button slot="reference">退出</el-button>
+          </el-popconfirm>
         </div>
       </div>
     </div>
@@ -85,11 +95,15 @@ export default {
   created() {
     console.log('header!')
     console.log(this.header_info)
+    this.header_info.if_login = window.sessionStorage.getItem('if_login')
+    console.log('this.header_info.if_login',this.header_info.if_login)
+    var test = window.sessionStorage.getItem('donor_info')
+    console.log('this.donor_info',test)
   },
   methods: {
     gotoProjectList() {
       console.log(this.header_info.height_line)
-      if(this.header_info.height_line!==2){
+      if (this.header_info.height_line !== 2) {
         //直接跳转
         // 修改heightline下标，将信息传值给下一个页面
         console.log(this.header_info)
@@ -103,7 +117,7 @@ export default {
     },
     gotoHome() {
       // console.log(this.header_info.height_line)
-      if(this.header_info.height_line!==0){
+      if (this.header_info.height_line !== 0) {
         //直接跳转
         // 修改heightline下标，将信息传值给下一个页面
         console.log(this.header_info)
@@ -121,9 +135,17 @@ export default {
     },
     gotoPersonal(user_id) {
       //直接跳转到个人中心
-      console.log('login ',user_id)
-      this.$router.push('/Maincontrol/'+user_id);
-    }
+      console.log('login ', user_id)
+      this.$router.push('/Maincontrol/' + user_id);
+    },
+    logout(){
+      window.sessionStorage.setItem('if_login',false)
+      window.sessionStorage.removeItem('if_login')
+      this.header_info.if_login = false
+      if(window.sessionStorage.getItem('donor_info')){
+        window.sessionStorage.removeItem('donor_info')
+      }
+    },
   }
 }
 </script>
@@ -177,7 +199,8 @@ export default {
     line-height: 27px;
     text-decoration: none;
   }
-  .heightline{
-    color: crimson!important;
+
+  .heightline {
+    color: crimson !important;
   }
 </style>

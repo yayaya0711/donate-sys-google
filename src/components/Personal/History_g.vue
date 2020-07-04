@@ -1,5 +1,5 @@
 <template>
-<div style="width=100%">
+<div style="width:100%">
     <el-divider></el-divider>
     <span>搜索条件</span>
     <el-divider></el-divider>
@@ -27,7 +27,7 @@
         :value="item.value">
       </el-option>
       </el-select>
-    </el-col>   
+    </el-col>
     </el-row>
 
     <el-divider></el-divider>
@@ -67,7 +67,8 @@
 </template>
 
 <script>
-
+import axios from 'axios'
+var root_url = 'http://localhost:9090'
 export default {
   name: 'History_g',
   data() {

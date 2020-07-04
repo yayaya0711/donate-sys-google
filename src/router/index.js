@@ -10,7 +10,7 @@ import ProjectDetail from "@/components/project/ProjectDetail";
 import DonateList from "@/components/donation/DonateList";
 import DonateListFinished from "@/components/donation/DonateListFinished";
 import DonateLogistics from "@/components/donation/DonateLogistics";
-
+import NoRedictDonateCard from "@/components/noRedictDonation/NoRedictDonateCard";
 
 import Login from "@/components/login/Login";
 import Findpassword from "@/components/login/Findpassword";
@@ -50,13 +50,13 @@ export default new Router({
       component: ProjectList
     },
     {
-      path: '/projectList/projectDetail/:jum',
+      path: '/projectList/projectDetail/:pro_id/',
       name: '项目详情',
       component: ProjectDetail,
       children: []
     },
     {
-      path: '/donateList/:jum',
+      path: '/donateList/:pro_id/:user_id/',
       name: '定向捐赠单填写',
       component: DonateList
     },
@@ -116,39 +116,35 @@ export default new Router({
           component: Message
         },
         {
-          path: '/checkproject',
-          name: 'Checkproject',
-          component: Checkproject
+          path: '/Maincontrol/noRedictDonate/:user_id/',
+          name: 'NoRedictDonate',
+          component: NoRedictDonateCard
         }
 
       ]
     },
       {
-        path: '/Maincontrol_g',
+        path: '/Maincontrol_g/:user_id/',
         name: "受赠方个人中心",
         component: Maincontrol_g,
         children: [
           {
-            path: '/history_g',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
+            path: '/Maincontrol_g/history_g/:user_id/',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
             name: 'History_g',
             component: History_g
           },
           {
-            path: '/personalcenter_g',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
+            path: '/Maincontrol_g/personalcenter_g/:user_id/',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
             name: 'Personalcenter_g',
             component: Personalcenter_g
           },
           {
-            path: '/message_g',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
+            path: '/Maincontrol_g/message_g/:user_id/',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
             name: 'Message',
             component: Message
           },
           {
-            path: '',
-            component: History
-          },
-          {
-            path: '/setproject',
+            path: '/Maincontrol_g/setproject_g/:user_id/',
             name: 'Setproject',
             component: Setproject
           },

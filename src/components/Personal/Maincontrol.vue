@@ -18,7 +18,7 @@
             <el-menu-item index="presonal" @click="$router.push('/Maincontrol/personalcenter/'+user_id)">个人信息</el-menu-item>
             <el-menu-item index="love" @click="$router.push('/Maincontrol/love/'+user_id)">爱心值</el-menu-item>
             <el-menu-item index="history" @click="$router.push('/Maincontrol/history/'+user_id)">历史信息查询</el-menu-item>
-            <el-menu-item index="#">捐赠意向提交</el-menu-item>
+            <el-menu-item index="noRedictDonate" @click="$router.push('/Maincontrol/noRedictDonate/'+user_id)">捐赠意向提交</el-menu-item>
             <el-menu-item index="message" @click="$router.push('/Maincontrol/message/'+user_id)">消息列表</el-menu-item>
           </el-menu>
         </el-col>
@@ -44,6 +44,7 @@ import '../../assets/baseStyle.css'
 import MainTop from "../MainTop";
 import MainBottom from "../MainBottom";
 import axios from "axios";
+var root_url = 'http://localhost:9090'
 import SearchBar from "../SearchBar";
 
 export default {
@@ -72,7 +73,7 @@ export default {
     this.user_id = this.$route.params.user_id
     console.log('loading personal center', this.user_id)
     // this.getParams()
-    this.get_center_info_test()
+    // this.get_center_info_test()
 
   },
   methods: {
@@ -147,10 +148,14 @@ export default {
       //api请求方法
       let data = {"donor_id ": this.user_id};
       // axios.post(`${this.$url}/test/testRequest`,data)
-      axios.post(root_url + `/donor/personalCenter`, data)
+      axios.get(root_url + `/donor/personalCenter`, {
+        params: {
+          donor_id: this.user_id,
+        }
+      })
         .then(res => {
           console.log('res=>', res);
-          if (res.status === '200') {
+          if (res.status === 200) {
             //登陆成功，直接跳转到个人中心
             this.proList = res.proList
             this.donorInfo = res.donorInfo

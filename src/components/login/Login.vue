@@ -112,10 +112,15 @@ export default {
       //api请求方法
       let data = {"account": this.form.username, "password": this.form.password};
       // axios.post(`${this.$url}/test/testRequest`,data)
-      axios.post(root_url + `/donor/login`, data)
+      axios.get(root_url + `/donor/login`, {
+        params: {
+          account: this.form.username,
+          password: this.form.password
+        }
+      })
         .then(res => {
           console.log('res=>', res);
-          if (res.status === '200') {
+          if (res.status === 200) {
             //登陆成功，直接跳转到个人中心
             var request_data={}
             this.$set(request_data,'header_info',this.header_info)
@@ -138,10 +143,15 @@ export default {
       //api请求方法
       let data = {"account": this.form.username, "password": this.form.password};
       // axios.post(`${this.$url}/test/testRequest`,data)
-      axios.post(root_url + `/donor/login`, data)
+      axios.get(root_url + `/donor/login`, {
+        params: {
+          account: this.form.username,
+          password: this.form.password
+        }
+      })
         .then(res => {
           console.log('res=>', res);
-          if (res.status === '200') {
+          if (res.status === 200) {
             //登陆成功，直接跳转到个人中心
 
             this.$router.push('/Maincontrol_g');
@@ -174,6 +184,12 @@ export default {
               "msg": "登录成功",
               "status": 200
             }
+            // 保存信息
+            var test_data = JSON.stringify(donor_info_response.donor)
+            console.log('json data',test_data)
+            window.sessionStorage.setItem('if_login',true)
+            window.sessionStorage.setItem('donor_info',test_data)
+
             // this.$set(request_data,'header_info',this.header_info)
             // this.$set(request_data,'donor_info',donor_info_response.donor)
             // this.$router.push({
@@ -185,7 +201,13 @@ export default {
             this.$router.push("/Maincontrol/" + donor_info_response.donor.donor_id);
             return true;
           } else if (this.form.username == "root2" && this.form.password == "123456" && this.form.user_type) {
-            this.$router.push('/Maincontrol_g');
+            var recipient_info_response = {
+              "msg": "登录成功",
+              "recipientId": 6,
+              "status": 200
+            }
+            window.sessionStorage.setItem('if_login',true)
+            this.$router.push('/Maincontrol_g/'+recipient_info_response.recipientId);
             return true;
           } else {//真正项目中登录成功之后，就可以用路由跳转页面
             if(this.form.user_type){

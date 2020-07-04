@@ -5,6 +5,9 @@
     </el-header>
     <SearchBar :navi_info="navi_info"></SearchBar>
     <el-main style="width: 1440px">
+      <el-col :span="12" :offset="6">
+
+
       <div v-for="i in project_detail" :key="i.proID" class="project_card">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
@@ -12,7 +15,7 @@
             <el-button style="float: right; padding: 3px 0" type="text" @click="gotoProjectDetail(i)">查看详情</el-button>
           </div>
           <el-row>
-            <el-col :span="8">
+            <el-col :span="6">
 <!--              <img :src="require('../../assets/project.png')" class="image">-->
 <!--              <img src="src/assets/project.png" class="image">-->
               <img :src="img_url">
@@ -33,6 +36,7 @@
           :total="project_list_response.proNum">
         </el-pagination>
       </div>
+      </el-col>
     </el-main>
     <el-footer>
       <MainBottom></MainBottom>
@@ -78,37 +82,41 @@ export default {
   created(){
     this.getParams()
     console.log(this.header_info)
-    this.project_list_response={
-      "msg": "查询成功",
-      "proList": [
-        {
-          "proID": 1,
-          "proIntro": "医院a现急需口罩等医疗物资",
-          "proName": "急需口罩志愿"
-        },
-        {
-          "proID": 2,
-          "proIntro": "养老院a现需要电热毯，热水袋若干，为老人的冬天带来温暖",
-          "proName": "为老人献爱心"
-        },
-        {
-          "proID": 3,
-          "proIntro": "给自闭症儿童一只展现自己的画笔",
-          "proName": "孩子们的是艺术道路"
-        }
-      ],
-      "proNum": 3,
-      "status": 200
-    }
-    this.project_detail = this.project_list_response.proList
+    this.get_project_list_test()
     // 获取列表数据
+    // this.get_project_list()
   },
   mounted(){
     //api GET方法：localhost:9090/projects/prolist
-    // this.getProjectList()
+    // this.get_project_list()
   },
   methods: {
-    getProjectList(){
+    get_project_list_test(){
+      this.project_list_response={
+        "msg": "查询成功",
+        "proList": [
+          {
+            "proID": 1,
+            "proIntro": "医院a现急需口罩等医疗物资",
+            "proName": "急需口罩志愿"
+          },
+          {
+            "proID": 2,
+            "proIntro": "养老院a现需要电热毯，热水袋若干，为老人的冬天带来温暖",
+            "proName": "为老人献爱心"
+          },
+          {
+            "proID": 3,
+            "proIntro": "给自闭症儿童一只展现自己的画笔",
+            "proName": "孩子们的是艺术道路"
+          }
+        ],
+        "proNum": 3,
+        "status": 200
+      }
+      this.project_detail = this.project_list_response.proList
+    },
+    get_project_list(){
       axios.get(root_url+'/projects/prolist')
         .then((response)=>{
           console.log(response.data);
@@ -138,15 +146,7 @@ export default {
     gotoProjectDetail(i) {
       //直接跳转
       window.console.log("查询成功", i);
-      console.log(this.header_info)
-      var request_data={}
-      this.$set(request_data,'header_info',this.header_info)
-      this.$set(request_data,'project_detail',this.project_detail)
-      this.$router.push({
-        name: '项目详情',
-        path: '/projectList/projectDetail',
-        params: {jum:request_data}
-      });
+      this.$router.push('/projectList/projectDetail/'+i.proID);
     }
   }
 };
@@ -154,11 +154,11 @@ export default {
 
 <style scoped>
   .box-card {
-    width: 60%;
+    /*width: 60%;*/
   }
   .project_card{
     text-align: left;
-    margin-left: 20%;
+    /*margin-left: 20%;*/
   }
   .pages_element{
     margin-top: 20px;

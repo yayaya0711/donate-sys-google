@@ -39,7 +39,7 @@
 				<td width="10%"><p><b>编号</b></p></td>
 				<td width="20%"><p><b>项目名称</b></p></td>
 				<td width="20%"><p><b>项目缩略图</b></p></td>
-				<td width="20%"><p><b>物资类型</b></p></td>
+				<td width="20%"><p><b>物资详情</b></p></td>
 				<td width="10%"><p><b>审核状态</b></p></td>
 				<td width="10%"><p><b>物流状态</b></p></td>
 				<td width="10%"><p><b>操作</b></p></td>
@@ -48,22 +48,24 @@
         <td colspan="7"><el-divider></el-divider><td/>
       </tr>
 			<tr class="dataRow" v-for="i in donor_history" :key="i">
-				<td width="10%"><p>{{i.TargetId}}</p></td>
-				<td width="20%"><p>{{i.MatchPro}}</p></td>
+				<td width="10%"><p>{{i.donationId}}</p></td>
+				<td width="20%"><p>{{i.proName}}</p></td>
 				<td width="20%"><img src="../../assets/hospital.jpg" width="100px" height="100px"/></td>
-				<td width="20%"><p>{{i.DonateMaterials}}</p></td>
+				<td width="20%" style="text-align: left;padding-left: 5%;">
+          <p v-for="n in i.materials.split('；')">{{n}}</p>
+        </td>
 				<td width="10%">
-          <p v-if="i.IfAudit===1">审核通过</p>
-          <p v-else-if="i.IfAudit===0">待审核</p>
-          <p v-else-if="i.IfAudit===2">审核未通过</p>
+          <p v-if="i.ifAudit==='1'">审核通过</p>
+          <p v-else-if="i.ifAudit==='0'">待审核</p>
+          <p v-else-if="i.ifAudit==='2'">审核未通过</p>
         </td>
 				<td width="10%"><p>已发出</p></td>
 				<td width="10%">
-        <a href="#" style="margin-top: -30px;text-decoration: none;color:green;">
-								填写物流编号</a>
+<!--        <a href="#" style="margin-top: -30px;text-decoration: none;color:green;">-->
+<!--								填写物流编号</a>-->
         <p></p>
-        <p style="text-decoration: none;color:green;" @click="gotoFindpassword()">
-								查看项目进度</p></td>
+        <p style="text-decoration: none;color:green;" @click="gotoDonateDetail()">
+								查看捐赠单</p></td>
 			</tr>
 		</table>
 </div>
@@ -72,7 +74,8 @@
 
 <script>
 
-import axios from "axios";
+import axios from 'axios'
+var root_url = 'http://localhost:9090'
 
 export default {
   name: 'History',
@@ -81,7 +84,8 @@ export default {
     input_project_name:'',
     input_supply_type:'',
     audit_status:'',
-    logistics_status:''
+    logistics_status:'',
+    donor_history:[],
 	}
   },created() {
     this.user_id = this.$route.params.user_id
@@ -92,92 +96,62 @@ export default {
   },
   methods: {
     get_history_info_test() {
-      var res = {
-        donor_id: 2,
-        data: {
-          "donorHistory": [
+      var res ={
+          "DonationHistory": [
             {
-              "TargetId": 2,
-              "DonorId": 2,
-              "Category": 2,
-              "DonateMaterials": "电热毯：20",
-              "IfStandard": 1,
-              "IfAudit": 1,
-              "DonateTime": "2020-06-29T16:20:58.177748+08:00",
-              "MatchPro": 2,
-              "IfAnonymous": 0,
-              "Message": "要开心"
-            },
-            {
-              "TargetId": 3,
-              "DonorId": 2,
-              "Category": 3,
-              "DonateMaterials": "蜡笔：10",
-              "IfStandard": 1,
-              "IfAudit": 1,
-              "DonateTime": "2020-06-29T16:21:02.502261+08:00",
-              "MatchPro": 3,
-              "IfAnonymous": 0,
-              "Message": "快快乐乐！"
-            }
-          ],
-          "donorInfo": {
-            "DonorID": 2,
-            "Account": "123457",
-            "Password": "111",
-            "Nickname": "bob",
-            "Name": "bob",
-            "IdNumber": "123457",
-            "CurResidence": "湖南长沙",
-            "City": "长沙",
-            "Avatar": "",
-            "LoveValue": "100",
-            "Profile": ""
-          },
-          "msg": "查询成功",
-          "proList": [
-            {
+              "donationId": "2",
+              "ifAudit": "1",
               "materials": "电热毯：50；热水袋：50；保暖衣：100",
-              "proId": "2",
-              "proIntro": "养老院a现需要电热毯，热水袋若干，为老人的冬天带来温暖",
               "proName": "为老人献爱心",
               "rec_donation_num": "2"
             },
             {
+              "donationId": "3",
+              "ifAudit": "1",
               "materials": "水彩笔：30套；蜡笔：30套；画本：100本",
-              "proId": "3",
-              "proIntro": "给自闭症儿童一只展现自己的画笔",
               "proName": "孩子们的是艺术道路",
               "rec_donation_num": "1"
             }
           ],
+          "msg": "查询成功",
           "status": 200
         }
+        console.log('login status,',window.sessionStorage.getItem('if_login'))
+      if (res.status === 200 && window.sessionStorage.getItem('if_login')) {
+        //登陆成功，直接跳转到个人中心
+        this.donor_history = res.DonationHistory
+      } else {
+        this.$message.error('获取信息失败，请重新登录~');
+        this.$router.push('/login');
       }
-      this.proList = res.data.proList
-      // this.donorInfo = res.data.donorInfo
-      this.donor_history = res.data.donorHistory
     },
     get_history_info() {
       //api请求方法
       let data = {"donor_id ": this.user_id};
       // axios.post(`${this.$url}/test/testRequest`,data)
-      axios.post(root_url + `/donor/personalCenter`, data)
+      axios.get(root_url + `/donor/personalCenter`, {
+        params: {
+          donor_id: this.user_id,
+        }
+      })
         .then(res => {
           console.log('res=>', res);
-          if (res.status === '200') {
+          if (res.status === 200 && window.sessionStorage.getItem('if_login')) {
             //登陆成功，直接跳转到个人中心
-            this.proList = res.proList
-            this.donorInfo = res.donorInfo
-            this.donorHistory = res.donorHistory
+            this.donor_history = res.DonationHistory
           } else {
-            this.$message.error('获取信息失败~');
+            this.$message.error('获取信息失败，请重新登录~');
+            this.$router.push('/login');
           }
         })
     },
-    gotoFindpassword() {
-      //直接跳转到找回密码
-      this.$router.push('/checkproject');
+    gotoDonateDetail() {
+      //跳转到捐赠单详情
+      this.$router.push({
+        name: '定向捐赠单填写完成',
+        // name: 'mallList',
+        params: {jum:request_data}
+      });
     }
   }
 }

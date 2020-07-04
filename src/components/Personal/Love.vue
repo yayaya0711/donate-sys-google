@@ -85,7 +85,8 @@
 </template>
 
 <script>
-
+import axios from 'axios'
+var root_url = 'http://localhost:9090'
 export default {
   name: 'Love',
   data() {

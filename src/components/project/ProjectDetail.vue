@@ -19,15 +19,15 @@
               <el-col :span="12">
                 <div style="margin: 5%;">
                   <div class="need_staff" style="text-align: left">
-                    <p class="project_name">{{project_detail.name}}</p>
+                    <p class="project_name">{{project_detail.proName}}</p>
                     <p class="project_info">
                       <span>
                         <i class="el-icon-location" style="color: red"></i>
-                        {{project_detail.place}}
+                        {{project_detail.RecAddress}}
                       </span>
                     </p>
                     <p class="project_info">
-                      <span>{{'发起方： '+project_detail.demander.name}}</span>
+                      <span>{{'发起方： '+demander_info.company}}</span>
                     </p>
                     <p class="project_info">
                       <span>
@@ -37,10 +37,11 @@
                       </span>
                     </p>
                     <p class="project_info">
-                      <span>{{"参与度： "+project_detail.receive_times +" 人次"}}</span>
+                      <span>{{"参与度： "+project_detail.participantsNumber +" 人次"}}</span>
                     </p>
-                    <li v-for="(item,idx) in needy_list" style="color: crimson;line-height: 20px">
-                      <span>{{item[0]+': '+ item[1]+' '+ item[2]}}</span>
+                    <li v-for="(item,idx) in project_detail.materials.split('；')"
+                        style="color: crimson;line-height: 20px">
+                      <span>{{item}}</span>
                     </li>
                   </div>
                 </div>
@@ -63,12 +64,12 @@
                 <el-avatar :size="100" :src="circleUrl" style="margin: 5%"></el-avatar>
               </el-row>
               <el-row>
-                <span>{{project_detail.demander.name}}</span>
+                <span>{{demander_info.company}}</span>
               </el-row>
             </div>
             <el-row>
               <p style="margin-right: 5%;margin-left: 5%;text-align: left;line-height: 30px">
-                {{project_detail.demander.description}}
+                {{demander_info.profile}}
               </p>
             </el-row>
 
@@ -79,30 +80,35 @@
         <el-col :span="12" :offset="3">
           <div style="background: white;text-align: left;">
             <div style="padding: 5%">
-              <p class="demander_detail">物资应用人群</p>
-              <p class="demander_info">{{project_detail.needy_group}}</p>
+              <!--              <p class="demander_detail">物资应用人群</p>-->
+              <!--              <p class="demander_info">{{project_detail.needy_group}}</p>-->
               <p class="demander_detail">物资详情</p>
-              <p class="demander_type">医疗物资</p>
-              <div class="demander_info">
-                <div v-for="(item,idx) in project_detail.demande_list.medical">
-                  <p>{{'【 '+item.name+' 】'}}</p>
-                  <p>{{'型号：'+item.type}}</p>
-                  <p>{{'需求数量：'+item.demander_amount}}</p>
-                  <p>{{'剩余需求：'+item.needy_amount}}</p>
-                  <p>{{'规格：'+item.rules}}</p>
-                  <p>参考图片：</p>
-                  <img style="width: 100%" :src="item.img_url">
+              <div v-if="project_detail.category==='0'">
+                <!--                <p class="demander_type">医疗物资</p>-->
+                <!--                <div class="demander_info">-->
+                <!--                  <div v-for="(item,idx) in project_detail.demande_list.medical">-->
+                <!--                    <p>{{'【 '+item.name+' 】'}}</p>-->
+                <!--                    <p>{{'型号：'+item.type}}</p>-->
+                <!--                    <p>{{'需求数量：'+item.demander_amount}}</p>-->
+                <!--                    <p>{{'剩余需求：'+item.needy_amount}}</p>-->
+                <!--                    <p>{{'规格：'+item.rules}}</p>-->
+                <!--                    <p>参考图片：</p>-->
+                <!--                    <img style="width: 100%" :src="item.img_url">-->
+                <!--                  </div>-->
+                <!--                </div>-->
+              </div>
+              <div v-if="project_detail.category==='2'">
+                <p class="demander_type">生活物资</p>
+                <div class="demander_info">
+                  <div v-for="(item,idx) in project_detail.materials.split('；')">
+                    <p>{{'【 '+item.split('：')[0]+' 】'}}</p>
+                    <!--                    <p>{{'型号：'+item.type}}</p>-->
+                    <p>{{'需求数量：'+item.split('：')[1]}}</p>
+                    <p>{{'剩余需求：'+item.split('：')[1]}}</p>
+                  </div>
                 </div>
               </div>
-              <p class="demander_type">生活物资</p>
-              <div class="demander_info">
-                <div v-for="(item,idx) in project_detail.demande_list.daliy">
-                  <p>{{'【 '+item.name+' 】'}}</p>
-                  <p>{{'型号：'+item.type}}</p>
-                  <p>{{'需求数量：'+item.demander_amount}}</p>
-                  <p>{{'剩余需求：'+item.needy_amount}}</p>
-                </div>
-              </div>
+
             </div>
 
           </div>
@@ -112,7 +118,7 @@
             <div class="footprint_titel">
               爱心足迹
             </div>
-            <div v-for="l in project_detail.donate_footprint" :key="l.id" style="padding: 7%" class="footprint_card">
+            <div v-for="(l,i) in donate_footprint" :key="i" style="padding: 7%" class="footprint_card">
               <el-row>
                 <el-col :span="4">
                   <div>
@@ -120,21 +126,21 @@
                   </div>
                 </el-col>
                 <el-col :span="20">
-                  <p class="footprint_info">{{l.user}}</p>
-                  <p class="footprint_info">{{l.things}}</p>
+                  <p class="footprint_info">{{l.name}}</p>
+                  <p class="footprint_info">{{l.donateMaterials}}</p>
                 </el-col>
               </el-row>
               <el-row>
-                <div v-if="l.message">
+                <div v-if="l.massage">
                   <el-collapse v-model="activeNames" @change="handleChange">
                     <el-collapse-item title="爱心留言" style="border-bottom: 0">
-                      <p>{{l.message}}</p>
+                      <p>{{l.massage}}</p>
                     </el-collapse-item>
                   </el-collapse>
                 </div>
               </el-row>
               <el-row>
-                <p class="footprint_info">{{l.time}}</p>
+                <p class="footprint_info">{{l.donorTime.split('T')[0]}}</p>
               </el-row>
             </div>
           </div>
@@ -152,7 +158,9 @@
 import MainTop from "../MainTop";
 import MainBottom from "../MainBottom";
 import SearchBar from "../SearchBar";
+import axios from "axios";
 
+var root_url = 'http://localhost:9090'
 export default {
   components: {MainTop, MainBottom, SearchBar},
   name: "ProjectDetail",
@@ -160,78 +168,6 @@ export default {
     return {
       circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
       img_url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-      project_detail: {
-        id: '0100001',
-        name: '武汉体育中心',
-        place: '湖北省武汉市XXX区EEE街道',
-        demander: {
-          name: '湖北红十字',
-          description: '湖北红十字会致力于公益事业，巴拉巴拉巴拉巴拉，湖北红十字会致力于公益事业',
-        },
-        receive_times: '1975',
-        emergency: 4,
-        needy_group: '新冠医护人员基本需求',
-        demande_list: {
-          medical: [
-            {
-              name: '口罩',
-              id: '0200001',
-              type: 'CN95',
-              needy_amount: 2000,
-              demander_amount: 10000,
-              scal: '个',
-              rules: 'WWWWWWWWWWWWWWWWWWW',
-              img_url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
-            }
-          ],
-          daliy: [
-            {
-              name: '帐篷',
-              id: '0200002',
-              type: '----',
-              needy_amount: 200,
-              demander_amount: 500,
-              scal: '顶',
-            },
-            {
-              name: '被子',
-              id: '0200003',
-              type: '1.5m',
-              needy_amount: 200,
-              demander_amount: 500,
-              scal: '顶',
-            }
-          ]
-        },
-        donate_footprint: [{
-          user: "user1",
-          id: '0300001',
-          time: "2020年2月20日",
-          message: "今生无悔如华夏，来生还做中华家。因为你们，支撑起万千中华儿女的信念。加油，同时也要保护好自己~",
-          things: "被子4床，口罩20个"
-        },
-          {
-            user: "user2",
-            id: '0300002',
-            time: "2020年2月7日",
-            message: "",
-            things: "口罩40个"
-          },
-          {
-            user: "user3",
-            id: '0300003',
-            time: "2020年2月8日",
-            message: "",
-            things: "口罩100个"
-          }
-        ]
-
-      },
-      needy_list: [
-        ['口罩', '1000', '个'],
-        ['帐篷', '200', '顶'],
-        ['被子', '200', '床']
-      ],
       activeNames: ['0'],
       header_info: {
         height_line: -1,
@@ -239,32 +175,96 @@ export default {
         user_type: '0', // 0 is donator, 1 is reciver
         if_show_navi: false
       },
-      navi_info:{
-        if_searchBar:false,
-        navi_list:[
-          {name: '首页',path:'/'},
-          {name: '项目列表',path: '/projectList'},
+      navi_info: {
+        if_searchBar: false,
+        navi_list: [
+          {name: '首页', path: '/'},
+          {name: '项目列表', path: '/projectList'},
           // {name:'项目详情',path:''}
         ],
-        now_place:'项目详情'
-      }
-
+        now_place: '项目详情'
+      },
+      demander_info: {},
+      donate_footprint: {},
+      project_detail: {},
     }
   },
   created() {
-    this.getParams()
-    console.log(this.header_info)
+    this.pro_id = this.$route.params.pro_id
+    this.get_project_detail_test()
 
-// //在页面刷新时将vuex里的信息保存到localStorage里
-//     window.addEventListener("beforeunload",()=>{
-//       localStorage.setItem("messageStore",JSON.stringify(this.$store.state))
-//     })
-//
-// //在页面加载时读取localStorage里的状态信息
-//     localStorage.getItem("messageStore") && this.$store.replaceState(Object.assign(this.$store.state,JSON.parse(localStorage.getItem("messageStore"))));
-//
+    var t = 5 - Number(this.project_detail.emergency)
+    console.log('t:', t)
+    console.log('this.project_detail.emergency:', this.project_detail.emergency)
+    this.project_detail.emergency = t
+
+    this.navi_info.now_place = this.project_detail.proName
+
+    this.project_detail.demander = this.demander_info.company
+    // this.getParams()
+    console.log('this.navi_info', this.navi_info)
+
   },
   methods: {
+    get_project_detail_test() {
+      var res = {
+        "donorInfo": [
+          {
+            "donateMaterials": "电热毯：20",
+            "donorTime": "2020-06-29T16:20:58.177748+08:00",
+            "massage": "要开心",
+            "name": "bob"
+          },
+          {
+            "donateMaterials": "蜡笔：10",
+            "donorTime": "2020-06-29T16:21:02.502261+08:00",
+            "massage": "快快乐乐！",
+            "name": "cindy"
+          }
+        ],
+        "msg": "项目详情如下",
+        "proDetails": {
+          "RecAddress": "广州",
+          "category": "2",
+          "emergency": "0",
+          "intro": "养老院a现需要电热毯，热水袋若干，为老人的冬天带来温暖",
+          "materials": "电热毯：50；热水袋：50；保暖衣：100",
+          "participantsNumber": "2",
+          "proId": "2",
+          "proName": "为老人献爱心"
+        },
+        "recipientInfo": {
+          "company": "养老院a",
+          "profile": "good"
+        },
+        "status": 200
+      }
+      this.project_detail = res.proDetails
+      this.demander_info = res.recipientInfo
+      this.donate_footprint = res.donorInfo
+
+      // this.project_detail.materials =
+    },
+    get_project_detail() {
+      //api请求方法
+      // let data = {"pro_id ": };
+      axios.get(root_url + `/projects/prodetails`, {
+        params: {
+          pro_id: this.pro_id,
+        }
+      })
+        .then(res => {
+          console.log('res=>', res);
+          if (res.status === 200) {
+            //登陆成功，直接跳转到个人中心
+            this.project_detail = res.proDetails
+            this.demander_info = res.recipientInfo
+            this.donate_footprint = res.donorInfo
+          } else {
+            this.$message.error('获取信息失败~');
+          }
+        })
+    },
     getParams() {
       // 取到路由带过来的参数
       console.log('准备数据中。。。。。')
@@ -281,26 +281,25 @@ export default {
     },
     gotoDonate(e) {
       //判断是否登录，如果未登录需要跳转登录页
-      console.log('goto donate')
-      console.log(e)
       console.log('if login')
       console.log(this.header_info.if_login)
       // this.$router.push('/login');
-      if(this.header_info.if_login){
+      if (this.header_info.if_login) {
         //直接跳转
         window.console.log("跳转填写页");
-        // this.$router.push('/donateList');
-        var request_data = {}
-        this.$set(request_data, 'header_info', this.header_info)
-        this.$set(request_data, 'project_detail', this.project_detail)
-        this.$router.push({
-          name: '定向捐赠单填写',
-          path: '/donateList',
-          params: {jum: request_data}
-        });
-      }
-      else{
+        // 保存页面信息
+        var test_data = JSON.stringify(this.project_detail)
+        console.log('json data', test_data)
+        window.sessionStorage.setItem('pro_detail', test_data)
+        var donor_info = JSON.parse(window.sessionStorage.getItem('donor_info'))
+        console.log('json data donor_info', this.donor_info)
+        this.$router.push("/donateList/" + this.pro_id + "/" + donor_info.donor_id);
+      } else {
         //直接跳转到个人中心
+        this.$message({
+          type: 'info',
+          message: '请先登录~'
+        });
         this.$router.push('/login');
       }
 
@@ -350,17 +349,21 @@ export default {
     margin-bottom: 0;
     line-height: 15px;
   }
-  .footprint_card{
+
+  .footprint_card {
     border-bottom: 1px solid #ffb6c1;
   }
-  .footprint_card:last-child{
+
+  .footprint_card:last-child {
     border-bottom: 0px;
   }
+
   .el-collapse-item__header, .el-collapse-item__wrap,
-  .el-collapse-item:last-child{
-    border-bottom:0px!important;
+  .el-collapse-item:last-child {
+    border-bottom: 0px !important;
   }
-  .el-collapse{
-    border:0px!important;
+
+  .el-collapse {
+    border: 0px !important;
   }
 </style>

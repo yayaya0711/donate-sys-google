@@ -82,7 +82,7 @@
                     <el-form-item label="捐赠数量" :label-width="formLabelWidth">
                       <el-input-number v-model="form.amount" @change="handleChange" :min="1" :max="form.supply.needy_amount" label="描述文字"></el-input-number>
                     </el-form-item>
-                    <el-form-item v-if="form.supply.if_need_identify">
+                    <el-form-item v-if="form.supply.if_need_identify" label="" :label-width="formLabelWidth">
                       <el-upload
                         class="upload-demo"
                         action="https://jsonplaceholder.typicode.com/posts/"
@@ -140,6 +140,7 @@ import MainTop from "../MainTop";
 import MainBottom from "../MainBottom";
 import SearchBar from "../SearchBar";
 import ProjectCard from "../project/ProjectCard"
+import axios from "axios";
 export default {
   components: {MainTop, MainBottom,SearchBar,ProjectCard},
   name: "DonateList",
@@ -245,14 +246,7 @@ export default {
         supply_type:'',
         rules: '',
         amount: 0,
-        img_info:[{
-          name: 'food.jpeg',
-          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-        },
-          {
-            name: 'food2.jpeg',
-            url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-          }],
+        img_info:[],
         identitfy:false,
       },
       formLabelWidth: '120px',
@@ -270,28 +264,50 @@ export default {
     }
   },
   created(){
+    this.user_id = this.$route.params.user_id
     this.getParams()
     console.log(this.header_info)
-    this.donateList_info_response = {
-      "donor": {
-        "id_number": "123456",
-        "name": "alice",
-        "phone": "123456"
-      },
-      "msg": "返回成功",
-      "recipient": {
-        "com_address": "北京",
-        "company": "医院a",
-        "name": "医院a",
-        "phone": "123456"
-      },
-      "status": 200
-    }
     this.donor = this.donateList_info_response.donor
     this.donor.if_anonymous=false
     this.recipient = this.donateList_info_response.recipient
   },
   methods: {
+    get_donate_list_test() {
+      var res ={
+        "donor": {
+          "id_number": "123456",
+          "name": "alice",
+          "phone": "123456"
+        },
+        "msg": "返回成功",
+        "recipient": {
+          "com_address": "北京",
+          "company": "医院a",
+          "name": "医院a",
+          "phone": "123456"
+        },
+        "status": 200
+      }
+
+      this.donor = res.donor
+      this.recipient = res.recipient
+    },
+    get_donate_list() {
+      //api请求方法
+      let data = {"donor_id ": this.user_id,"recipient_id":this.u};
+      axios.post(root_url + `/projects/prodetails`, data)
+        .then(res => {
+          console.log('res=>', res);
+          if (res.status === 200) {
+            //登陆成功，直接跳转到个人中心
+            this.project_detail = res.proDetails
+            this.demander_info = res.recipientInfo
+            this.donate_footprint = res.donorInfo
+          } else {
+            this.$message.error('获取信息失败~');
+          }
+        })
+    },
     getParams(){
       // 取到路由带过来的参数
       console.log('准备数据中。。。。。')

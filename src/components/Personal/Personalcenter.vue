@@ -4,30 +4,30 @@
       <table class="quickTable" id="rtable" width="500px" height="600px">
         <tr class="dataRow">
           <td width="250px" style="margin-top: 50px">用户账号：</td>
-          <td width="250px" style="margin-top: 50px; margin-left: 200px">{{donor_info.Account}}</td>
+          <td width="250px" style="margin-top: 50px; margin-left: 200px">{{donor_info.account}}</td>
         </tr>
         <tr class="dataRow">
           <td width="500px" style="margin-top: 100px">姓名：</td>
-          <td width="500px" style="margin-top: 100px; margin-left: 200px">{{donor_info.Nickname}}</td>
+          <td width="500px" style="margin-top: 100px; margin-left: 200px">{{donor_info.nickname}}</td>
         </tr>
         <tr class="dataRow">
           <td width="500px" style="margin-top: 150px">身份证号：</td>
-          <td width="500px" style="margin-top: 150px; margin-left: 200px">{{donor_info.IdNumber}}</td>
+          <td width="500px" style="margin-top: 150px; margin-left: 200px">{{donor_info.id_number}}</td>
         </tr>
         <tr class="dataRow">
           <td width="500px" style="margin-top: 200px">地址：</td>
-          <td width="500px" style="margin-top: 200px; margin-left: 200px">{{donor_info.City}}</td>
+          <td width="500px" style="margin-top: 200px; margin-left: 200px">{{donor_info.city}}</td>
         </tr>
         <tr class="dataRow">
           <td width="500px" style="margin-top: 250px">详细地址：</td>
           <td width="500px" style="margin-top: 250px; margin-left: 200px">
-            <p>{{donor_info.CurResidence}}</p>
+            <p>{{donor_info.cur_residence}}</p>
           </td>
         </tr>
         <tr class="dataRow">
           <td width="500px" style="margin-top: 250px">个人简介：</td>
           <td width="500px" style="margin-top: 250px; margin-left: 200px">
-            <p>{{donor_info.Profile}}</p>
+            <p>{{donor_info.profile}}</p>
           </td>
         </tr>
       </table>
@@ -80,7 +80,8 @@
 
 <script>
 
-import axios from "axios";
+import axios from 'axios'
+var root_url = 'http://localhost:9090'
 
 export default {
   name: 'Personalcenter',
@@ -101,94 +102,19 @@ export default {
   created() {
     this.user_id = this.$route.params.user_id
     console.log('donor_info!',this.user_id)
-    this.get_presonal_info_test()
+    this.get_personal_info()
     // this.getParams()
     console.log(this.donor_info)
   },
   methods: {
-    get_presonal_info_test() {
-      var res = {
-        donor_id: 2,
-        data: {
-          "donorHistory": [
-            {
-              "TargetId": 2,
-              "DonorId": 2,
-              "Category": 2,
-              "DonateMaterials": "电热毯：20",
-              "IfStandard": 1,
-              "IfAudit": 1,
-              "DonateTime": "2020-06-29T16:20:58.177748+08:00",
-              "MatchPro": 2,
-              "IfAnonymous": 0,
-              "Message": "要开心"
-            },
-            {
-              "TargetId": 3,
-              "DonorId": 2,
-              "Category": 3,
-              "DonateMaterials": "蜡笔：10",
-              "IfStandard": 1,
-              "IfAudit": 1,
-              "DonateTime": "2020-06-29T16:21:02.502261+08:00",
-              "MatchPro": 3,
-              "IfAnonymous": 0,
-              "Message": "快快乐乐！"
-            }
-          ],
-          "donorInfo": {
-            "DonorID": 2,
-            "Account": "123457",
-            "Password": "111",
-            "Nickname": "bob",
-            "Name": "bob",
-            "IdNumber": "123457",
-            "CurResidence": "湖南长沙",
-            "City": "长沙",
-            "Avatar": "",
-            "LoveValue": "100",
-            "Profile": ""
-          },
-          "msg": "查询成功",
-          "proList": [
-            {
-              "materials": "电热毯：50；热水袋：50；保暖衣：100",
-              "proId": "2",
-              "proIntro": "养老院a现需要电热毯，热水袋若干，为老人的冬天带来温暖",
-              "proName": "为老人献爱心",
-              "rec_donation_num": "2"
-            },
-            {
-              "materials": "水彩笔：30套；蜡笔：30套；画本：100本",
-              "proId": "3",
-              "proIntro": "给自闭症儿童一只展现自己的画笔",
-              "proName": "孩子们的是艺术道路",
-              "rec_donation_num": "1"
-            }
-          ],
-          "status": 200
-        }
-      }
-      // this.proList = res.data.proList
-      this.donor_info = res.data.donorInfo
-      // this.donorHistory = res.data.donorHistory
-    },
     get_personal_info() {
-      //api请求方法
-      let data = {"donor_id ": this.user_id};
-      // axios.post(`${this.$url}/test/testRequest`,data)
-      axios.post(root_url + `/donor/personalCenter`, data)
-        .then(res => {
-          console.log('res=>', res);
-          if (res.status === '200') {
-            //登陆成功，直接跳转到个人中心
-            this.proList = res.proList
-            this.donorInfo = res.donorInfo
-            this.donorHistory = res.donorHistory
-          } else {
-            this.$message.error('获取信息失败~');
-          }
-        })
+      if(window.sessionStorage.getItem('if_login')){
+        this.donor_info = JSON.parse(window.sessionStorage.getItem('donor_info'))
+        console.log('json data',this.donor_info)
+      }else{
+        this.$message.error('获取信息失败，请重新登录~');
+        this.$router.push('/login');
+      }
     },
     getParams() {
       // 取到路由带过来的参数

@@ -175,7 +175,7 @@ export default {
     return {
       header_info: {
         height_line: 0,
-        if_login: true,
+        if_login: false,
         user_type: '0', // 0 is donator, 1 is reciver,
         if_show_navi: true
       },
