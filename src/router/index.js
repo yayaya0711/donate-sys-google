@@ -56,12 +56,12 @@ export default new Router({
       children: []
     },
     {
-      path: '/donateList/:pro_id/:user_id/',
+      path: '/donateList/input/:pro_id/:user_id/',
       name: '定向捐赠单填写',
       component: DonateList
     },
     {
-      path: '/donateList/finished/:jum',
+      path: '/donateList/finished/:tar_don_id',
       name: '定向捐赠单填写完成',
       component: DonateListFinished
     },

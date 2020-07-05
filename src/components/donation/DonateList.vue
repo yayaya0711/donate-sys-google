@@ -41,12 +41,12 @@
                   <i class="el-icon-plus" style="color: crimson" @click="donateSuppliesFormVisible = true"></i>
                 </p>
                 <div>
-                  <el-row v-for="(item,index) in supplies_list" :key="item.supply_id" class="supply_info">
+                  <el-row v-for="(item,index) in supplies_list" :key="item.supply_name" class="supply_info">
                     <el-col :span="4" class="supply_item" style="line-height: normal">
                       <img :src="item.img_info[0].url" style="width: 100%">
                     </el-col>
                     <el-col :span="8" class="supply_item" style="line-height: 30px;text-align: left">
-                      <p class="demander_detail">{{item.supply.name}}</p>
+                      <p class="demander_detail">{{item.supply_name}}</p>
                       <p>{{item.rules}}</p>
                     </el-col>
                     <el-col :span="6" class="supply_item">
@@ -69,8 +69,8 @@
                 <!--                弹窗-->
                 <el-dialog title="添加捐赠物资" :visible.sync="donateSuppliesFormVisible">
                   <el-form :model="form" :rules="from_rules" ref="form">
-                    <el-form-item label="物资名称" :label-width="formLabelWidth" prop="name">
-                      <el-select v-model="form.supply_id" placeholder="请选择" @change="selectSupply">
+                    <el-form-item label="物资名称" :label-width="formLabelWidth" prop="supply_name">
+                      <el-select v-model="form.supply_name" placeholder="请选择" @change="selectSupply">
                         <el-option v-for="(i,index) in project_detail.materials" :key="index" :label="i.split('：')[0]"
                                    :value="i.split('：')[0]"
                                    :disabled="typeof i.if_select!='undefined' && i.if_select"></el-option>
@@ -174,7 +174,7 @@ export default {
       supplies_list: [],
       form: {
         supply: {},
-        supply_id: '',
+        supply_name: '',
         supply_type: '',
         rules: '',
         amount: 0,
@@ -185,7 +185,7 @@ export default {
         identitfy: false,
       },
       from_rules: {
-        name: [
+        supply_name: [
           {required: true, message: '请选择物资', trigger: 'change'},
         ],
         rules: [
@@ -300,7 +300,7 @@ export default {
       console.log(this.form);
       this.form = {
         supply: {},
-        supply_id: '',
+        supply_name: '',
         product: '',
         rules: '',
         amount: 0,
@@ -361,7 +361,8 @@ export default {
     identifySupply(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!');
+          // alert('submit!');
+          this.$message({type:'success',message:'验证通过~'})
           console.log('This is identify supply fuction')
           this.form.identitfy = true
           console.log(this.form);
@@ -394,42 +395,62 @@ export default {
       }
       // 所有验证判断通过
       if (finished) {
-        // 合并数据
-        var request_data = {}
-        this.$set(request_data, 'donater_info', this.user_info)
-        this.$set(request_data, 'demander_info', this.project_detail.demander)
-        this.$set(request_data, 'project_info', this.project_detail)
-        this.$set(request_data, 'supplies_info', this.supplies_list)
-        this.$set(request_data, 'donate_msg', this.donate_msg)
-        this.$set(request_data, 'header_info', this.header_info)
-        console.log(request_data)
         // 跳转
-        this.$router.push({
-          name: '定向捐赠单填写完成',
-          // name: 'mallList',
-          params: {jum: request_data}
-        });
+        // this.$router.push({
+        //   name: '定向捐赠单填写完成',
+        //   // name: 'mallList',
+        //   params: {jum: request_data}
+        // });
+        this.post_donate_list_test()
       }
 
     },
     post_donate_list_test(){
-
-    },
-    post_donate_list(){
+      var materials_str='';
+      var i='';
+      // var index= 0;
+      console.log('this.supplies_list', this.supplies_list)
+      for(i in this.supplies_list) {
+        console.log('this.supplies_list', this.supplies_list[i])
+        materials_str = materials_str +
+          this.supplies_list[i].supply_name +'：'+this.supplies_list[i].amount+'；'
+      }
       //api请求方法
       let data = {
-        "donor_id ": this.user_id,
-        "recipient_id": this.project_detail.demander_id
+        "pro_id": this.pro_id,
+        "donor_id": this.user_id,
+        "message":this.donate_msg,
+        "materials":materials_str,
+        "if_anonymous":this.if_anonymous,
+        "category":this.project_detail.category
       };
-      axios.post(root_url + `/donor/donateList`, data)
+      console.log('json data finished', data)
+      this.$router.push("/donateList/finished/" + '22');
+    },
+    post_donate_list(){
+      var materials_str='';
+      // var i='';
+      for(var i in this.supplies_list) {
+        materials_str=i.supply_name +'：'+i.amount+'；'
+      }
+      //api请求方法
+      let data = {
+        "pro_id": this.pro_id,
+        "donor_id": this.user_id,
+        "message":this.donate_msg,
+        "materials":materials_str,
+        "if_anonymous":this.if_anonymous,
+        "category":this.project_detail.category
+      };
+      axios.post(root_url + `/donor/addTargerDona`, data)
         .then(res => {
           console.log('res=>', res);
           if (res.status === 200) {
-            //登陆成功，直接跳转到个人中心
-            this.donor = res.donor
-            this.recipient = res.recipient
+            //登陆成功，直接跳转到捐赠单完成页
+            this.$router.push("/donateList/finished/" + res.donotion.TargetId);
+
           } else {
-            this.$message.error('获取信息失败~');
+            this.$message.error('提交失败，请重新提交~');
           }
         })
     },

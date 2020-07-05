@@ -2,32 +2,40 @@
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="信息查看" name="first">
         <table class="quickTable" id="rtable" width="500px" height="600px">
+<!--          <tr class="dataRow">-->
+<!--            <td width="250px" style="margin-top: 50px">用户账号：</td>-->
+<!--            <td width="250px" style="margin-top: 50px; margin-left: 200px">{{recipient_info.Account}}</td>-->
+<!--          </tr>-->
+<!--          <tr class="dataRow">-->
+<!--            <td width="500px" style="margin-top: 100px">姓名：</td>-->
+<!--            <td width="500px" style="margin-top: 100px; margin-left: 200px">{{recipient_info.Nickname}}</td>-->
+<!--          </tr>-->
+<!--          <tr class="dataRow">-->
+<!--            <td width="500px" style="margin-top: 150px">身份证号：</td>-->
+<!--            <td width="500px" style="margin-top: 150px; margin-left: 200px">{{recipient_info.IdNumber}}</td>-->
+<!--          </tr>-->
           <tr class="dataRow">
-            <td width="250px" style="margin-top: 50px">用户账号：</td>
-            <td width="250px" style="margin-top: 50px; margin-left: 200px">{{donor_info.Account}}</td>
+            <td width="500px" style="margin-top: 200px">类别：</td>
+            <td width="500px" style="margin-top: 200px; margin-left: 200px">{{recipient_info.category}}</td>
           </tr>
           <tr class="dataRow">
-            <td width="500px" style="margin-top: 100px">姓名：</td>
-            <td width="500px" style="margin-top: 100px; margin-left: 200px">{{donor_info.Nickname}}</td>
-          </tr>
-          <tr class="dataRow">
-            <td width="500px" style="margin-top: 150px">身份证号：</td>
-            <td width="500px" style="margin-top: 150px; margin-left: 200px">{{donor_info.IdNumber}}</td>
+            <td width="500px" style="margin-top: 200px">机构名称：</td>
+            <td width="500px" style="margin-top: 200px; margin-left: 200px">{{recipient_info.company}}</td>
           </tr>
           <tr class="dataRow">
             <td width="500px" style="margin-top: 200px">地址：</td>
-            <td width="500px" style="margin-top: 200px; margin-left: 200px">{{donor_info.City}}</td>
+            <td width="500px" style="margin-top: 200px; margin-left: 200px">{{recipient_info.com_address}}</td>
           </tr>
+<!--          <tr class="dataRow">-->
+<!--            <td width="500px" style="margin-top: 250px">详细地址：</td>-->
+<!--            <td width="500px" style="margin-top: 250px; margin-left: 200px">-->
+<!--              <p>{{donor_info.com_address}}</p>-->
+<!--            </td>-->
+<!--          </tr>-->
           <tr class="dataRow">
-            <td width="500px" style="margin-top: 250px">详细地址：</td>
+            <td width="500px" style="margin-top: 250px">机构简介：</td>
             <td width="500px" style="margin-top: 250px; margin-left: 200px">
-              <p>{{donor_info.CurResidence}}</p>
-            </td>
-          </tr>
-          <tr class="dataRow">
-            <td width="500px" style="margin-top: 250px">个人简介：</td>
-            <td width="500px" style="margin-top: 250px; margin-left: 200px">
-              <p>{{donor_info.Profile}}</p>
+              <p>{{recipient_info.profile}}</p>
             </td>
           </tr>
         </table>
@@ -91,71 +99,28 @@ export default {
           address: '',
         },
         activeName: 'first',
-      donor_info:{}
+      recipient_info:{}
       };
   },
   created() {
     this.user_id = this.$route.params.user_id
-    console.log('donor_info!',this.user_id)
-    this.get_presonal_info_test()
-    console.log(this.donor_info)
+    console.log('recipient_id!',this.user_id)
+    this.get_personal_info()
+    // console.log(this.recipient_info)
   },
   methods: {
-    get_presonal_info_test() {
-      var res = {
-          "info": {
-            "RecipientId": 2,
-            "Account": "",
-            "Password": "",
-            "Name": "养老院a",
-            "IdNumber": "123457",
-            "Company": "养老院a",
-            "ComCategory": "养老院",
-            "CreditCode": "2",
-            "ComAddress": "广州",
-            "ComProfile": "good",
-            "RecipientNum": 0
-          },
-          "msg": "查询成功",
-          "proList": [
-            {
-              "RecAddress": "广州",
-              "demandId": "2",
-              "intro": "养老院a现需要电热毯，热水袋若干，为老人的冬天带来温暖",
-              "materials": "电热毯：50；热水袋：50；保暖衣：100",
-              "proName": "为老人献爱心"
-            }
-          ],
-          "recipientInfo": {
-            "category": "养老院",
-            "com_address": "广州",
-            "company": "养老院a",
-            "creditCode": "2",
-            "profile": "good",
-            "recipientId": "2"
-          },
-          "status": 200
-        }
-      // this.proList = res.data.proList
-      this.donor_info = res.info
-      // this.donorHistory = res.data.donorHistory
-    },
     get_personal_info() {
-      //api请求方法
-      let data = {"donor_id ": this.user_id};
-      // axios.post(`${this.$url}/test/testRequest`,data)
-      axios.post(root_url + `/donor/personalCenter`, data)
-        .then(res => {
-          console.log('res=>', res);
-          if (res.status === 200) {
-            //登陆成功，直接跳转到个人中心
-            this.proList = res.proList
-            this.donorInfo = res.donorInfo
-            this.donorHistory = res.donorHistory
-          } else {
-            this.$message.error('获取信息失败~');
-          }
-        })
+      console.log('creat function')
+      console.log('if_login',window.sessionStorage.getItem('if_login'))
+      console.log('recipient_info',window.sessionStorage.getItem('recipient_info'))
+
+      if(window.sessionStorage.getItem('if_login')){
+        this.recipient_info = JSON.parse(window.sessionStorage.getItem('recipient_info'))
+        console.log('json data',this.recipient_info)
+      }else{
+        this.$message.error('获取信息失败，请重新登录~');
+        this.$router.push('/login');
+      }
     },
     handleClick(tab, event) {
         console.log(tab, event);

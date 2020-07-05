@@ -64,7 +64,7 @@
 <!--        <a href="#" style="margin-top: -30px;text-decoration: none;color:green;">-->
 <!--								填写物流编号</a>-->
         <p></p>
-        <p style="text-decoration: none;color:green;" @click="gotoDonateDetail()">
+        <p style="text-decoration: none;color:green;" @click="gotoDonateDetail(i.donationId)">
 								查看捐赠单</p></td>
 			</tr>
 		</table>
@@ -127,7 +127,7 @@ export default {
     },
     get_history_info() {
       //api请求方法
-      let data = {"donor_id ": this.user_id};
+      let data = {"donor_id": this.user_id};
       // axios.post(`${this.$url}/test/testRequest`,data)
       axios.get(root_url + `/donor/personalCenter`, {
         params: {
@@ -145,13 +145,14 @@ export default {
           }
         })
     },
-    gotoDonateDetail() {
+    gotoDonateDetail(donationId) {
       //跳转到捐赠单详情
-      this.$router.push({
-        name: '定向捐赠单填写完成',
-        // name: 'mallList',
-        params: {jum:request_data}
-      });
+      this.$router.push("/donateList/finished/" + donationId);
+      // this.$router.push({
+      //   name: '定向捐赠单填写完成',
+      //   // name: 'mallList',
+      //   params: {jum:request_data}
+      // });
     }
   }
 }

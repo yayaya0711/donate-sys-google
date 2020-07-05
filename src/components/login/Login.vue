@@ -122,14 +122,18 @@ export default {
           console.log('res=>', res);
           if (res.status === 200) {
             //登陆成功，直接跳转到个人中心
-            var request_data={}
-            this.$set(request_data,'header_info',this.header_info)
-            this.$set(request_data,'donor_info',res.data)
-            this.$router.push({
-              name: '个人中心',
-              path: '/Maincontrol',
-              params: {jum:request_data}
-            })
+            var test_data = JSON.stringify(res.donor)
+            console.log('json data',test_data)
+            window.sessionStorage.setItem('if_login',true)
+            window.sessionStorage.setItem('user_typr','0')
+            window.sessionStorage.setItem('donor_info',test_data)
+            this.$router.push("/Maincontrol/" + res.donor.donor_id);
+
+            // this.$router.push({
+            //   name: '个人中心',
+            //   path: '/Maincontrol',
+            //   params: {jum:request_data}
+            // })
             // this.$router.push('/Maincontrol');
             // this.donor_info = res.data
           }
@@ -153,9 +157,13 @@ export default {
           console.log('res=>', res);
           if (res.status === 200) {
             //登陆成功，直接跳转到个人中心
+            window.sessionStorage.setItem('if_login',true)
+            window.sessionStorage.setItem('user_typr','1')
+            window.sessionStorage.setItem('recipient_info',res.recipientInfo)
+            this.$router.push('/Maincontrol_g/'+res.recipientId);
 
-            this.$router.push('/Maincontrol_g');
-            this.donor_info = res.data
+            // this.$router.push('/Maincontrol_g');
+            // this.donor_info = res.data
           }
           if (res.status === '400') {
             this.$message.error('账号密码不正确');
@@ -188,6 +196,7 @@ export default {
             var test_data = JSON.stringify(donor_info_response.donor)
             console.log('json data',test_data)
             window.sessionStorage.setItem('if_login',true)
+            window.sessionStorage.setItem('user_typr','0')
             window.sessionStorage.setItem('donor_info',test_data)
 
             // this.$set(request_data,'header_info',this.header_info)
@@ -203,10 +212,19 @@ export default {
           } else if (this.form.username == "root2" && this.form.password == "123456" && this.form.user_type) {
             var recipient_info_response = {
               "msg": "登录成功",
-              "recipientId": 6,
+              "recipientId": 1,
+              "recipientInfo": {
+                "category": "医院",
+                "com_address": "北京",
+                "company": "医院a",
+                "profile": "医院"
+              },
               "status": 200
             }
+            var test_data = JSON.stringify(recipient_info_response.recipientInfo)
             window.sessionStorage.setItem('if_login',true)
+            window.sessionStorage.setItem('user_typr','1')
+            window.sessionStorage.setItem('recipient_info',test_data)
             this.$router.push('/Maincontrol_g/'+recipient_info_response.recipientId);
             return true;
           } else {//真正项目中登录成功之后，就可以用路由跳转页面
@@ -218,17 +236,17 @@ export default {
               // this.submitForm1()
 
             }
-            //直接跳转
-            window.console.log("查询成功", i);
-            // console.log(this.header_info)
-            var request_data={}
-            this.$set(request_data,'header_info',this.header_info)
-            this.$set(request_data,'donor_info',this.project_detail)
-            this.$router.push({
-              name: '项目详情',
-              path: '/projectList/projectDetail',
-              params: {jum:request_data}
-            });
+            // //直接跳转
+            // window.console.log("查询成功", i);
+            // // console.log(this.header_info)
+            // var request_data={}
+            // this.$set(request_data,'header_info',this.header_info)
+            // this.$set(request_data,'donor_info',this.project_detail)
+            // this.$router.push({
+            //   name: '项目详情',
+            //   path: '/projectList/projectDetail',
+            //   params: {jum:request_data}
+            // });
 
             this.$message.error('账号密码不正确');
             return false;
