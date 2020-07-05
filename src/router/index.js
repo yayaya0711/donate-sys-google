@@ -29,6 +29,8 @@ import Personalcenter_g from "@/components/Personal/Personalcenter_g";
 import Setproject from "@/components/Personal/Setproject";
 import History_g from "@/components/Personal/History_g";
 
+import GGMap from "@/components/GGMap";
+
 Vue.use(Router)
 
 export default new Router({
@@ -43,6 +45,11 @@ export default new Router({
       path: '/home',
       name: '首页',
       component: Home
+    },
+    {
+      path:'/map',
+      name: '地图',
+      component:GGMap
     },
     {
       path: '/projectList',
