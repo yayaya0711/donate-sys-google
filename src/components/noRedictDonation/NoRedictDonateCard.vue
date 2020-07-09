@@ -61,7 +61,7 @@
           <!--                弹窗-->
           <el-dialog title="添加捐赠物资" :visible.sync="donateSuppliesFormVisible">
             <el-form :model="form">
-              <el-form-item v-if="form.type" label="物资类别" :label-width="formLabelWidth">
+              <el-form-item v-if="form_type" label="物资类别" :label-width="formLabelWidth">
                 <el-select v-model="form.supply_type" placeholder="请选择" @change="selectSupplyType">
                   <el-option v-for="i in supply_type_list" :key="i.supply_id" :label="i.type"
                              :value="i.supply_id"></el-option>
@@ -70,7 +70,7 @@
               <el-form-item label="物资名称" :label-width="formLabelWidth">
                 <el-input v-model="form.supply_name" autocomplete="off"></el-input>
               </el-form-item>
-              <el-form-item v-if="form.type" label="规格标准" :label-width="formLabelWidth">
+              <el-form-item v-if="form_type" label="规格标准" :label-width="formLabelWidth">
                 <el-input v-model="form.supply_rule" autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item label="捐赠数量" :label-width="formLabelWidth">

@@ -41,10 +41,10 @@
                   </el-row>
 
                   <el-form-item label="密码" prop="password" style="width:260px; margin-left: 80px">
-                    <el-input v-model="formRGO.password" style="width:160px"></el-input>
+                    <el-input v-model="formRGO.password" show-password style="width:160px"></el-input>
                   </el-form-item>
                   <el-form-item label="确认密码" prop="cpassword" style="width:260px; margin-left: 80px">
-                    <el-input v-model="formRGO.cpassword" style="width:160px"></el-input>
+                    <el-input v-model="formRGO.cpassword" show-password style="width:160px"></el-input>
                   </el-form-item>
                   <el-form-item label="法定代表人" prop="name" style="width:260px; margin-left: 80px">
                     <el-input v-model="formRGO.name" style="width:160px"></el-input>

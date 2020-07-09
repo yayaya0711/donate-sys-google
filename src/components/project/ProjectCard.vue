@@ -19,7 +19,7 @@
                       </span>
                 </p>
                 <p class="project_info">
-                  <span>{{'发起方： '+project_detail.demander}}</span>
+                  <span>{{'发起方： '+project_detail.demander_name}}</span>
                 </p>
                 <p class="project_info">
                       <span>

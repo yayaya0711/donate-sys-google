@@ -211,13 +211,7 @@ export default {
       console.log('数据已准备好！')
     },
     gotoProjectList() {
-      console.log(this.header_info)
-      // 跳转
-      this.$router.push({
-        name: '项目列表',
-        path: '/projectList',
-        params: {jum: this.header_info}
-      });
+      this.$router.push("/projectList");
     },
     gotoPresonalCenter() {
       var test = window.sessionStorage.getItem('donor_info')
@@ -231,18 +225,19 @@ export default {
       // this.$router.push('/Maincontrol');
     },
     gotoLogistics() {
-      // 合并数据
-      var request_data = {}
-      this.$set(request_data, 'donater_info', this.donater_info)
-      this.$set(request_data, 'project_info', this.project_info)
-      this.$set(request_data, 'donate_msg', this.header_info)
-      console.log(request_data)
-      // 跳转
-      this.$router.push({
-        name: '物流信息',
-        path: '/logistics',
-        params: {jum: request_data}
-      });
+      // // 合并数据
+      // var request_data = {}
+      // this.$set(request_data, 'donater_info', this.donater_info)
+      // this.$set(request_data, 'project_info', this.project_info)
+      // this.$set(request_data, 'donate_msg', this.header_info)
+      // console.log(request_data)
+      // // 跳转
+      // this.$router.push({
+      //   name: '物流信息',
+      //   path: '/logistics',
+      //   params: {jum: request_data}
+      // });
+      this.$router.push("/logistics/" + '22');
     }
   },
   watch: {

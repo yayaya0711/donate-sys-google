@@ -61,7 +61,7 @@
 <!--        </td>-->
 <!--        <td width="10%"><p>已发出</p></td>-->
         <td width="10%">
-        <p style="text-decoration: none;color:green;" @click="gotoDonateDetail()">查看项目进度</p></td>
+        <p style="text-decoration: none;color:green;" @click="gotoDonateDetail(i.demandId)">查看项目进度</p></td>
 			</tr>
 		</table>
 </div>
@@ -126,13 +126,14 @@ export default {
           }
         })
     },
-    gotoDonateDetail() {
+    gotoDonateDetail(value) {
       //跳转到捐赠单详情
-      this.$router.push({
-        name: '定向捐赠单填写完成',
-        // name: 'mallList',
-        params: {jum:request_data}
-      });
+      // this.$router.push({
+      //   name: '定向捐赠单填写完成',
+      //   // name: 'mallList',
+      //   params: {jum:request_data}
+      // });
+      this.$router.push('/projectList/projectDetail/'+value);
     }
   }
 }

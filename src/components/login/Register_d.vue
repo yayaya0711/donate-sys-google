@@ -36,10 +36,10 @@
                   </el-row>
 
                   <el-form-item label="密码" prop="password" style="width:200px; margin-left: 80px">
-                    <el-input v-model="formRD.password" style="width:160px"></el-input>
+                    <el-input v-model="formRD.password" show-password style="width:160px"></el-input>
                   </el-form-item>
                   <el-form-item label="确认密码" prop="cpassword" style="width:200px; margin-left: 80px">
-                    <el-input v-model="formRD.cpassword" style="width:160px"></el-input>
+                    <el-input v-model="formRD.cpassword" show-password style="width:160px"></el-input>
                   </el-form-item>
                   <el-form-item label="真实姓名" prop="name" style="width:200px; margin-left: 80px">
                     <el-input v-model="formRD.name" style="width:160px"></el-input>

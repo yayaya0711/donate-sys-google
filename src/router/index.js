@@ -46,11 +46,11 @@ export default new Router({
       name: '首页',
       component: Home
     },
-    {
-      path:'/map',
-      name: '地图',
-      component:GGMap
-    },
+    // {
+    //   path:'/map',
+    //   name: '地图',
+    //   component:GGMap
+    // },
     {
       path: '/projectList',
       name: '项目列表',
@@ -73,7 +73,7 @@ export default new Router({
       component: DonateListFinished
     },
     {
-      path: '/logistics/:jum',
+      path: '/logistics/:tar_don_id',
       name: '物流信息',
       component: DonateLogistics
     },
